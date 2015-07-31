@@ -1,0 +1,116 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingTop="@dimen/activity_vertical_margin"
+                android:paddingBottom="@dimen/activity_vertical_margin"
+                tools:context=".MainActivity">
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/spent"
+        android:id="@+id/ewa_tv_label"
+        android:textSize="@dimen/abc_text_size_large_material"
+        android:textColor="#ff006aaa"
+        android:layout_marginTop="28dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="numberDecimal"
+        android:hint="0.0"
+        android:gravity="right"
+        android:textSize="41dp"
+        android:ems="18"
+        android:id="@+id/ewa_et_amount"
+        android:layout_marginTop="41dp"
+        android:layout_below="@+id/ewa_tv_label"
+        android:layout_toLeftOf="@+id/spinner_currency"
+        android:layout_alignLeft="@+id/ewa_tv_label2"
+        android:layout_alignStart="@+id/ewa_tv_label2"/>
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/spinner_currency"
+        android:layout_toRightOf="@+id/ewa_tv_label"
+        android:layout_toEndOf="@+id/ewa_tv_label"
+        android:textAlignment="center"
+        android:layout_alignBottom="@id/ewa_et_amount"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/ewa_et_usernote"
+        android:hint="Supermarket"
+        android:layout_below="@+id/ewa_tv_label2"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/submit_button"
+        android:id="@+id/ewa_b_save"
+        android:background="#ff0073ff"
+        android:textColor="#ffffff"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/reason_text"
+        android:id="@+id/ewa_tv_label2"
+        android:textSize="@dimen/abc_text_size_medium_material"
+        android:textColor="#ff006aaa"
+        android:layout_below="@+id/spinner_category"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/spinner_category"
+        android:layout_alignEnd="@+id/spinner_category"/>
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:id="@+id/spinner_category"
+        android:layout_below="@+id/ewa_et_amount"
+        android:layout_centerInParent="true"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Small Text"
+        android:id="@+id/tv_date"
+        android:layout_below="@+id/ewa_et_usernote"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:gravity="center_horizontal"
+        android:textAlignment="center"
+        android:layout_alignRight="@+id/ewa_et_amount"
+        android:layout_alignEnd="@+id/ewa_et_amount"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Small Text"
+        android:id="@+id/tv_time"
+        android:layout_alignBottom="@+id/tv_date"
+        android:layout_alignRight="@+id/ewa_et_usernote"
+        android:layout_alignEnd="@+id/ewa_et_usernote"
+        android:layout_alignLeft="@+id/spinner_currency"
+        android:layout_alignStart="@+id/spinner_currency"/>
+
+
+</RelativeLayout>
