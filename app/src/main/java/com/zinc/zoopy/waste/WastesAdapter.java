@@ -64,7 +64,6 @@ public class WastesAdapter extends ArrayAdapter {
         holder.bEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO make edit waste activity
                 Intent intent = new Intent(mContext, EditWasteActivity.class);
                 intent.putExtra("id", waste.getId());
                 intent.putExtra("amount", waste.amount);
@@ -76,8 +75,6 @@ public class WastesAdapter extends ArrayAdapter {
         holder.bDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO Delete from database
-                //((SwipeListView)parent).closeAnimate(position);
                 Waste.delete(Waste.class, waste.getId());
                 ((SwipeListView)parent).dismiss(position);
                 remove(mWastes.get(position));
@@ -85,11 +82,9 @@ public class WastesAdapter extends ArrayAdapter {
                 EventBus.getDefault().post(new EventBusMessage());
             }
         });
-
-
-
         return convertView;
     }
+
     static class ViewHolder {
         ImageView ivImage;
         TextView tvAmount;
@@ -98,10 +93,5 @@ public class WastesAdapter extends ArrayAdapter {
         Button bEdit;
         Button bDelete;
         public ViewHolder(){}
-    }
-    @Override
-    public void addAll(Collection collection) {
-        super.addAll(collection);
-        this.mWastes = (List<Waste>) collection;
     }
 }

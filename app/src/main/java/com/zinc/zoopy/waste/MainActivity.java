@@ -3,7 +3,6 @@ package com.zinc.zoopy.waste;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.text.format.Time;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,18 +14,26 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Calendar;
+
+import de.greenrobot.event.EventBus;
+
 
 public class MainActivity extends AppCompatActivity {
 
-    EditText mNumberInput;
-    EditText mTextInput;
-    TextView mDate;
-    TextView mTime;
-    Spinner mSpinnerCurrency;
-    Spinner mSpinnerCategory;
-    long mUnixTime;
-    Button mSubmit;
-    Time mNow = new Time();
+    private EditText mNumberInput;
+    private EditText mTextInput;
+    private TextView mDateTextView;
+    private TextView mTimeTextView;
+    private Spinner mSpinnerCurrency;
+    private Spinner mSpinnerCategory;
+    private Button mSubmit;
+
+    private MyDatePickerDialog mMyDatePickerDialog = new MyDatePickerDialog();
+    private MyTimePickerDialog mMyTimePickerDialog = new MyTimePickerDialog();
+    private Waste waste = new Waste();
+    final Calendar c = Calendar.getInstance();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,54 +43,88 @@ public class MainActivity extends AppCompatActivity {
         mSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //new Delete().from(Waste.class).execute();
-                saveInput();
+                saveInputs();
                 resetInputs();
             }
         });
     }
 
-    void initInstances(){
-        mNow.setToNow();
+    private void updateTimeView() {
+        this.mTimeTextView.setText(timeStringBuilder(mMyTimePickerDialog.pHour, mMyTimePickerDialog.pMinute));
+    }
+
+    private void updateDateView() {
+        this.mDateTextView.setText(dateStringBuilder(mMyDatePickerDialog.pDay, mMyDatePickerDialog.pMonth, mMyDatePickerDialog.pYear));
+    }
+
+    private StringBuilder dateStringBuilder(int d, int m, int y) {
+        return new StringBuilder().append(d).append("-").append(m + 1).append("-").append(y);
+    }
+
+    private StringBuilder timeStringBuilder(int h, int m) {
+        if (m < 10)
+            return new StringBuilder().append(h).append(":").append("0" + m);
+        else
+            return new StringBuilder().append(h).append(":").append(m);
+    }
+
+    public void setDate(View v) {
+        mMyDatePickerDialog.show(getSupportFragmentManager(), "datePicker");
+    }
+
+    public void setTime(View v) {
+        mMyTimePickerDialog.show(getSupportFragmentManager(), "timePicker");
+    }
+
+    public void onEvent(EventBusMessage event) {
+        switch (event.dialogID) {
+            case MyDatePickerDialog.DIALOG_ID:
+                updateDateView();
+                break;
+            case MyTimePickerDialog.DIALOG_ID:
+                updateTimeView();
+                break;
+        }
+
+    }
+
+    void initInstances() {
+        EventBus.getDefault().register(this);
         mNumberInput = (EditText) findViewById(R.id.ewa_et_amount);
         mTextInput = (EditText) findViewById(R.id.ewa_et_usernote);
-        mDate = (TextView)findViewById(R.id.tv_date);
-        mTime = (TextView)findViewById(R.id.tv_time);
+        mDateTextView = (TextView) findViewById(R.id.tv_date);
+        mTimeTextView = (TextView) findViewById(R.id.tv_time);
         mSubmit = (Button) findViewById(R.id.ewa_b_save);
         mSpinnerCurrency = (Spinner) findViewById(R.id.spinner_currency);
         mSpinnerCategory = (Spinner) findViewById(R.id.spinner_category);
+        mDateTextView.setText(dateStringBuilder(c.get(Calendar.DAY_OF_MONTH), c.get(Calendar.MONTH), c.get(Calendar.YEAR)));
+        mTimeTextView.setText(timeStringBuilder(c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE)));
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
     //TODO refactor this code v1.0
-    void saveInput() {
-        Waste waste = new Waste();
-        float number;
-        String text = mTextInput.getText().toString();
-
-
-        String day = mNow.format("%YYYY-%MM-%DD");
-        String time = mNow.format("%H:%M");
-        mUnixTime = System.currentTimeMillis();
-
+    void saveInputs() {
         try {
-            number = Float.parseFloat(mNumberInput.getText().toString());
+            waste.amount = Float.parseFloat(mNumberInput.getText().toString());
             waste.category = mSpinnerCategory.getSelectedItem().toString();
-            waste.amount = number;
             waste.currency = mSpinnerCurrency.getSelectedItem().toString();
-            waste.unixTime = mUnixTime;
-            waste.dayAdded = day;
-            waste.timeAdded = time;
-            waste.userNote = text;
+            waste.unixTime = System.currentTimeMillis();
+            waste.dayAdded = mDateTextView.getText().toString();
+            waste.timeAdded = mTimeTextView.getText().toString();
+            waste.userNote = mTextInput.getText().toString();
             waste.save();
-            showToast("You spent: " + waste.amount + ". \nWhere: " + waste.userNote + ". \nWhen: " + waste.timeAdded);
+            showToast("Amount: " + waste.amount + ". \nCategory: " + waste.category + ". \nComment: " + waste.userNote + ". \nDate: " + waste.timeAdded);
         } catch (Exception e) {
             Log.d("Invalid Input", "Exception: " + e.toString());
             showToast("Please, input number different from 0");
         }
     }
 
-    void showToast(String s) {
-        Toast.makeText(MainActivity.this, s, Toast.LENGTH_LONG).show();
-    }
 
     void resetInputs() {
         mNumberInput.setText("");
@@ -127,5 +168,9 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    void showToast(String s) {
+        Toast.makeText(MainActivity.this, s, Toast.LENGTH_LONG).show();
     }
 }

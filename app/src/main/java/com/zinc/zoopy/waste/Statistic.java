@@ -56,6 +56,12 @@ public class Statistic extends ActionBarActivity {
         mTotalSum.setText("Wasted: " + wastesSum);
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
     public void onEvent(EventBusMessage event){
         getWastesSum();
     }

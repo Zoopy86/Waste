@@ -6,6 +6,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,7 +21,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 
-public class EditWasteActivity extends ActionBarActivity {
+public class EditWasteActivity extends AppCompatActivity {
+
     public static long mID;
 
     @Override
@@ -69,6 +71,8 @@ public class EditWasteActivity extends ActionBarActivity {
         EditText userNote;
         Button mSaveButton;
         Context mContext;
+        TextView mDate;
+        TextView mTime;
         Waste waste = Waste.load(Waste.class, mID);
         public PlaceholderFragment() {
         }

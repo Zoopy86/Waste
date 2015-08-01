@@ -8,5 +8,6 @@
     <string name="reason_text">Comment:</string>
     <string name="title_activity_statistic">Statistic</string>
     <string name="title_activity_edit_waste">Edit Entry</string>
+    <string name="category">Category:</string>
 
 </resources>
