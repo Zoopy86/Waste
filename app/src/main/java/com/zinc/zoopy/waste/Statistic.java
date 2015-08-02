@@ -2,7 +2,7 @@ package com.zinc.zoopy.waste;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,7 +15,7 @@ import android.widget.TextView;
 import de.greenrobot.event.EventBus;
 
 
-public class Statistic extends ActionBarActivity {
+public class Statistic extends AppCompatActivity {
     ListView mListView;
     Spinner mSortSpinner;
     WastesAdapter mWastesAdapter;
@@ -27,7 +27,7 @@ public class Statistic extends ActionBarActivity {
         setContentView(R.layout.activity_statistic);
 
         EventBus.getDefault().register(this);
-        mListView = (ListView)findViewById(R.id.example_lv_list);
+        mListView = (ListView)findViewById(R.id.statistic_listview);
         mSortSpinner = (Spinner)findViewById(R.id.spinner_sort);
         mTotalSum = (TextView)findViewById(R.id.total_sum);
 
@@ -92,7 +92,7 @@ public class Statistic extends ActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
+        // Handle action bar waste_item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();

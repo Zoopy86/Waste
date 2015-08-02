@@ -20,8 +20,6 @@ public class Waste extends Model {
     public String dayAdded;
     @Column(name = "TimeAdded")
     public String timeAdded;
-    @Column (name = "Currency")
-    public String currency;
     @Column(name = "UnixTime")
     public long unixTime;
     @Column(name = "Category")
@@ -51,13 +49,6 @@ public class Waste extends Model {
             sum += wasteList.get(i).amount;
         }
         return sum;
-    }
-
-    public static Waste getById(long id){
-        return new Select()
-                .from(Waste.class)
-                .where("_id = ?", id)
-                .executeSingle();
     }
 
 }

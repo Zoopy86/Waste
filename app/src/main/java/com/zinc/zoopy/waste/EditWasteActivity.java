@@ -20,6 +20,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import de.greenrobot.event.EventBus;
+
 
 public class EditWasteActivity extends AppCompatActivity {
 
@@ -29,15 +31,13 @@ public class EditWasteActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_waste);
-        Intent intent = getIntent();
-        mID = intent.getLongExtra("id", 0);
+        mID = getIntent().getLongExtra("id", 0);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, new PlaceholderFragment())
                     .commit();
         }
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -48,7 +48,7 @@ public class EditWasteActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
+        // Handle action bar waste_item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
@@ -65,67 +65,102 @@ public class EditWasteActivity extends AppCompatActivity {
      */
     public static class PlaceholderFragment extends Fragment {
 
-        Spinner mSpinnerCurrency;
-        Spinner mSpinnerCategory;
         EditText amount;
         EditText userNote;
         Button mSaveButton;
         Context mContext;
-        TextView mDate;
-        TextView mTime;
+        TextView mDateTextView;
+        TextView mTimeTextView;
         Waste waste = Waste.load(Waste.class, mID);
+
+        MyDatePickerDialog mMyDatePickerDialog = new MyDatePickerDialog();
+        MyTimePickerDialog mMyTimePickerDialog = new MyTimePickerDialog();
+
         public PlaceholderFragment() {
         }
+
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
+            EventBus.getDefault().register(this);
             final View rootView = inflater.inflate(R.layout.fragment_edit_waste, container, false);
-            amount = (EditText)rootView.findViewById(R.id.ewa_et_amount);
-            userNote = (EditText)rootView.findViewById(R.id.ewa_et_usernote);
-            mSaveButton = (Button)rootView.findViewById(R.id.ewa_b_save);
+            amount = (EditText) rootView.findViewById(R.id.ewa_et_amount);
+            userNote = (EditText) rootView.findViewById(R.id.ewa_et_usernote);
+            mSaveButton = (Button) rootView.findViewById(R.id.ewa_b_save);
             mContext = rootView.getContext();
-            mSpinnerCurrency = (Spinner) rootView.findViewById(R.id.spinner_currency);
-            mSpinnerCategory = (Spinner)rootView.findViewById(R.id.spinner_category);
-            inflateSpinners();
+            mDateTextView = (TextView) rootView.findViewById(R.id.tv_date);
+            mTimeTextView = (TextView) rootView.findViewById(R.id.tv_time);
 
-            //Log.d("INTENT RECIEVE", "id = " + mID);
+
+            amount.setText(waste.amount.toString());
+            userNote.setText(waste.userNote);
+            mDateTextView.setText(waste.dayAdded);
+            mTimeTextView.setText(waste.timeAdded);
             mSaveButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-
                     try {
                         waste.amount = Float.parseFloat(amount.getText().toString());
                     } catch (Exception e) {
                         Log.e("logtag", "Exception: " + e.toString());
                     }
                     waste.userNote = userNote.getText().toString();
-                    waste.category = mSpinnerCategory.getSelectedItem().toString();
-                    waste.currency = mSpinnerCurrency.getSelectedItem().toString();
+                    //TODO get selected category
+                    waste.category = "Default";
+                    waste.dayAdded = mDateTextView.getText().toString();
+                    waste.timeAdded = mTimeTextView.getText().toString();
                     waste.save();
                     Intent intent = new Intent(mContext, Statistic.class);
                     startActivity(intent);
-
                 }
             });
-            amount.setText(waste.amount.toString());
-            userNote.setText(waste.userNote);
-
+            mDateTextView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    setDate();
+                }
+            });
+            mTimeTextView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    setTime();
+                }
+            });
             return rootView;
         }
-        void inflateSpinners(){
-            // Create an ArrayAdapter using the string array and a default spinner layout
-            ArrayAdapter<String> adapterCurrency = new ArrayAdapter<>(mContext,android.R.layout.simple_spinner_item, Currency.getAll());
-            ArrayAdapter<String> adapterCategory = new ArrayAdapter<>(mContext,android.R.layout.simple_spinner_item, Category.getAll());
-            // Specify the layout to use when the list of choices appears
-            adapterCurrency.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            adapterCategory.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            // Apply the adapter to the spinner
-            mSpinnerCurrency.setAdapter(adapterCurrency);
-            mSpinnerCurrency.setSelection(adapterCurrency.getPosition(waste.currency));
-            mSpinnerCategory.setAdapter(adapterCategory);
-            mSpinnerCategory.setSelection(adapterCategory.getPosition(waste.category));
+
+        private void updateTimeView() {
+            this.mTimeTextView.setText(Config.timeStringBuilder(mMyTimePickerDialog.pHour, mMyTimePickerDialog.pMinute));
+        }
+
+        private void updateDateView() {
+            this.mDateTextView.setText(Config.dateStringBuilder(mMyDatePickerDialog.pDay, mMyDatePickerDialog.pMonth, mMyDatePickerDialog.pYear));
+        }
+
+        public void onEvent(EventBusMessage event) {
+            switch (event.dialogID) {
+                case MyDatePickerDialog.DIALOG_ID:
+                    updateDateView();
+                    break;
+                case MyTimePickerDialog.DIALOG_ID:
+                    updateTimeView();
+                    break;
+            }
+        }
+
+        public void setDate() {
+            mMyDatePickerDialog.show(getActivity().getSupportFragmentManager(), "datePicker");
+        }
+
+        public void setTime() {
+            mMyTimePickerDialog.show(getActivity().getSupportFragmentManager(), "timePicker");
+        }
+
+        @Override
+        public void onStop() {
+            super.onStop();
+            EventBus.getDefault().unregister(this);
         }
     }
 }

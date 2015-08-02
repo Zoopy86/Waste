@@ -1,6 +1,7 @@
 package com.zinc.zoopy.waste;
 
 import android.app.Application;
+import android.widget.EditText;
 
 import com.activeandroid.ActiveAndroid;
 
@@ -9,12 +10,11 @@ import com.activeandroid.ActiveAndroid;
  */
 public class Config extends Application {
     private String[] mCategories = {"Products", "Electronics", "Leisure Time", "Tickets"};
-    private String[] mCurrencies = {"RUB", "USD", "EUR"};
     @Override
     public void onCreate() {
         super.onCreate();
         ActiveAndroid.initialize(this, true);
-        if(Category.getAll().length == 0){
+        if(Category.getAll().isEmpty()){
             ActiveAndroid.beginTransaction();
             try {
                 for (int i = 0; i < mCategories.length; i++) {
@@ -28,20 +28,21 @@ public class Config extends Application {
                 ActiveAndroid.endTransaction();
             }
         }
-        if(Currency.getAll().length == 0){
-            ActiveAndroid.beginTransaction();
-            try {
-                for (int i = 0; i < mCurrencies.length; i++) {
-                    Currency currencies = new Currency();
-                    currencies.name = mCurrencies[i];
-                    currencies.save();
-                }
-                ActiveAndroid.setTransactionSuccessful();
-            }
-            finally {
-                ActiveAndroid.endTransaction();
-            }
-        }
+    }
+
+    public static StringBuilder dateStringBuilder(int d, int m, int y) {
+        return new StringBuilder().append(d).append("-").append(m + 1).append("-").append(y);
+    }
+
+    public static StringBuilder timeStringBuilder(int h, int m) {
+        if (m < 10)
+            return new StringBuilder().append(h).append(":").append("0" + m);
+        else
+            return new StringBuilder().append(h).append(":").append(m);
+    }
+
+    public static boolean isEmpty(EditText etText) {
+        return etText.getText().toString().trim().length() == 0;
     }
 
     public static String sortTypeToString(SortTypes sortTypes){
@@ -54,6 +55,8 @@ public class Config extends Application {
             default: return "";
         }
     }
+
+
 
     public static int safeLongToInt(long l) {
         if (l < Integer.MIN_VALUE || l > Integer.MAX_VALUE) {

@@ -5,7 +5,6 @@ package com.zinc.zoopy.waste;
  */
 public class EventBusMessage {
     public int dialogID = 0;
-
     public EventBusMessage(){
 
     }

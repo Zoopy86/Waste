@@ -40,6 +40,26 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.zinc.zoopy.waste.Statistic" />
         </activity>
+        <activity
+            android:name=".PickCategory"
+            android:label="@string/title_activity_pick_category" >
+        </activity>
+        <activity
+            android:name=".EditCategory"
+            android:label="@string/title_activity_edit_category"
+            android:parentActivityName=".PickCategory" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.zinc.zoopy.waste.PickCategory" />
+        </activity>
+        <activity
+            android:name=".AddCategory"
+            android:label="@string/title_activity_add_category"
+            android:parentActivityName=".PickCategory" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.zinc.zoopy.waste.PickCategory" />
+        </activity>
     </application>
 
 </manifest>

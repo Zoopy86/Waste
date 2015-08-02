@@ -20,17 +20,10 @@ public class Category extends Model {
         super();
     }
 
-    public static String[] getAll() {
+    public static List<Category> getAll() {
         List<Category> list = new Select()
                 .from(Category.class)
                 .execute();
-        String[] categories = new String[list.size()];
-        if (list.size() > 0) {
-            for (int i = 0; i < list.size(); i++) {
-                categories[i] = list.get(i).name;
-            }
-        }
-
-        return categories;
+        return list;
     }
 }

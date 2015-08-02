@@ -7,10 +7,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,10 +23,9 @@ public class MainActivity extends AppCompatActivity {
     private EditText mTextInput;
     private TextView mDateTextView;
     private TextView mTimeTextView;
-    private Spinner mSpinnerCurrency;
-    private Spinner mSpinnerCategory;
+    private Button mPickCategoryButton;
     private Button mSubmit;
-
+    private String mCategory;
     private MyDatePickerDialog mMyDatePickerDialog = new MyDatePickerDialog();
     private MyTimePickerDialog mMyTimePickerDialog = new MyTimePickerDialog();
     private Waste waste = new Waste();
@@ -39,7 +36,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initInstances();
-        inflateSpinners();
         mSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -47,32 +43,58 @@ public class MainActivity extends AppCompatActivity {
                 resetInputs();
             }
         });
+
+    }
+
+    void initInstances() {
+        EventBus.getDefault().register(this);
+        mNumberInput = (EditText) findViewById(R.id.ewa_et_amount);
+        mTextInput = (EditText) findViewById(R.id.ewa_et_usernote);
+        mDateTextView = (TextView) findViewById(R.id.tv_date);
+        mTimeTextView = (TextView) findViewById(R.id.tv_time);
+        mPickCategoryButton = (Button) findViewById(R.id.b_pick_category);
+        mSubmit = (Button) findViewById(R.id.ewa_b_save);
+        mDateTextView.setText(Config.dateStringBuilder(c.get(Calendar.DAY_OF_MONTH), c.get(Calendar.MONTH), c.get(Calendar.YEAR)));
+        mTimeTextView.setText(Config.timeStringBuilder(c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE)));
+        mCategory = getIntent().getStringExtra("category_name");
+        if(mCategory == null || mCategory.matches("")){
+            mCategory = "No category";
+        }
+        mPickCategoryButton.setText(mCategory);
+        mPickCategoryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, PickCategory.class);
+                startActivity(intent);
+            }
+        });
+        mDateTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setDate();
+            }
+        });
+        mTimeTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setTime();
+            }
+        });
     }
 
     private void updateTimeView() {
-        this.mTimeTextView.setText(timeStringBuilder(mMyTimePickerDialog.pHour, mMyTimePickerDialog.pMinute));
+        this.mTimeTextView.setText(Config.timeStringBuilder(mMyTimePickerDialog.pHour, mMyTimePickerDialog.pMinute));
     }
 
     private void updateDateView() {
-        this.mDateTextView.setText(dateStringBuilder(mMyDatePickerDialog.pDay, mMyDatePickerDialog.pMonth, mMyDatePickerDialog.pYear));
+        this.mDateTextView.setText(Config.dateStringBuilder(mMyDatePickerDialog.pDay, mMyDatePickerDialog.pMonth, mMyDatePickerDialog.pYear));
     }
 
-    private StringBuilder dateStringBuilder(int d, int m, int y) {
-        return new StringBuilder().append(d).append("-").append(m + 1).append("-").append(y);
-    }
-
-    private StringBuilder timeStringBuilder(int h, int m) {
-        if (m < 10)
-            return new StringBuilder().append(h).append(":").append("0" + m);
-        else
-            return new StringBuilder().append(h).append(":").append(m);
-    }
-
-    public void setDate(View v) {
+    public void setDate() {
         mMyDatePickerDialog.show(getSupportFragmentManager(), "datePicker");
     }
 
-    public void setTime(View v) {
+    public void setTime() {
         mMyTimePickerDialog.show(getSupportFragmentManager(), "timePicker");
     }
 
@@ -85,20 +107,6 @@ public class MainActivity extends AppCompatActivity {
                 updateTimeView();
                 break;
         }
-
-    }
-
-    void initInstances() {
-        EventBus.getDefault().register(this);
-        mNumberInput = (EditText) findViewById(R.id.ewa_et_amount);
-        mTextInput = (EditText) findViewById(R.id.ewa_et_usernote);
-        mDateTextView = (TextView) findViewById(R.id.tv_date);
-        mTimeTextView = (TextView) findViewById(R.id.tv_time);
-        mSubmit = (Button) findViewById(R.id.ewa_b_save);
-        mSpinnerCurrency = (Spinner) findViewById(R.id.spinner_currency);
-        mSpinnerCategory = (Spinner) findViewById(R.id.spinner_category);
-        mDateTextView.setText(dateStringBuilder(c.get(Calendar.DAY_OF_MONTH), c.get(Calendar.MONTH), c.get(Calendar.YEAR)));
-        mTimeTextView.setText(timeStringBuilder(c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE)));
     }
 
     @Override
@@ -111,8 +119,7 @@ public class MainActivity extends AppCompatActivity {
     void saveInputs() {
         try {
             waste.amount = Float.parseFloat(mNumberInput.getText().toString());
-            waste.category = mSpinnerCategory.getSelectedItem().toString();
-            waste.currency = mSpinnerCurrency.getSelectedItem().toString();
+            waste.category = mPickCategoryButton.getText().toString();
             waste.unixTime = System.currentTimeMillis();
             waste.dayAdded = mDateTextView.getText().toString();
             waste.timeAdded = mTimeTextView.getText().toString();
@@ -132,18 +139,6 @@ public class MainActivity extends AppCompatActivity {
         mNumberInput.requestFocus();
     }
 
-    void inflateSpinners() {
-        // Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter<String> adapterCurrency = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, Currency.getAll());
-        ArrayAdapter<String> adapterCategory = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, Category.getAll());
-        // Specify the layout to use when the list of choices appears
-        adapterCurrency.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        adapterCategory.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // Apply the adapter to the spinner
-        mSpinnerCurrency.setAdapter(adapterCurrency);
-        mSpinnerCategory.setAdapter(adapterCategory);
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -153,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
+        // Handle action bar waste_item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
@@ -171,6 +166,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void showToast(String s) {
-        Toast.makeText(MainActivity.this, s, Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
     }
 }
