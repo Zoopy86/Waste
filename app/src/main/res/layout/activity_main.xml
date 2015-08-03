@@ -13,7 +13,7 @@
         android:id="@+id/ewa_tv_label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="10dp"
         android:gravity="center"
         android:text="@string/spent"
         android:textColor="#ff006aaa"
@@ -27,11 +27,14 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/ewa_tv_label"
+        android:layout_marginTop="15dp"
+        android:padding="5dp"
         android:gravity="center"
         android:hint="Click to input number"
         android:inputType="numberDecimal"
         android:textColor="#00a911"
         android:textColorHint="#cc2e2e2e"
+        android:background="@drawable/custom_edit_text"
         android:textSize="24sp"/>
 
     <View
@@ -41,7 +44,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/ewa_et_amount"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="15dp"
         android:background="#b4000637"/>
 
     <TextView
@@ -51,7 +54,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/separator1"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="15dp"
         android:text="@string/category"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="#FF006AAA"/>
@@ -62,7 +65,7 @@
         android:layout_height="wrap_content"
         android:text="Pick Category"
         android:layout_below="@+id/separator1"
-        android:layout_alignBottom="@+id/ma_tv_category"
+        android:layout_marginTop="5dp"
         android:layout_toRightOf="@+id/ma_tv_category"
         android:layout_toEndOf="@+id/ma_tv_category"/>
 
@@ -73,7 +76,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/ma_tv_category"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="15dp"
         android:background="#b4000637"/>
 
     <TextView
@@ -84,7 +87,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="false"
         android:layout_below="@+id/separator2"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="15dp"
         android:gravity="center"
         android:text="@string/reason_text"
         android:textAlignment="center"

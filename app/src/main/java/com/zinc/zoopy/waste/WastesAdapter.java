@@ -70,7 +70,7 @@ public class WastesAdapter extends ArrayAdapter {
                 ((SwipeListView)parent).dismiss(position);
                 remove(mWastes.get(position));
                 notifyDataSetChanged();
-                EventBus.getDefault().post(new EventBusMessage());
+                EventBus.getDefault().post(new EventBusDialogMessage());
             }
         });
         return convertView;

@@ -2,12 +2,9 @@ package com.zinc.zoopy.waste;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.app.TimePickerDialog;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.widget.DatePicker;
-import android.widget.TimePicker;
 
 import java.util.Calendar;
 
@@ -42,6 +39,6 @@ public class MyDatePickerDialog extends DialogFragment implements DatePickerDial
         pYear = year;
         pDay = day;
         pMonth = month;
-        EventBus.getDefault().post(new EventBusMessage(DIALOG_ID));
+        EventBus.getDefault().post(new EventBusDialogMessage(DIALOG_ID));
     }
 }

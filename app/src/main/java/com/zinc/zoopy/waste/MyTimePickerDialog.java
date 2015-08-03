@@ -1,6 +1,5 @@
 package com.zinc.zoopy.waste;
 
-import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
@@ -34,6 +33,6 @@ public class MyTimePickerDialog extends DialogFragment implements TimePickerDial
     public void onTimeSet(TimePicker timePicker, int hour, int minute) {
         pHour = hour;
         pMinute = minute;
-        EventBus.getDefault().post(new EventBusMessage(DIALOG_ID));
+        EventBus.getDefault().post(new EventBusDialogMessage(DIALOG_ID));
     }
 }

@@ -1,7 +1,7 @@
 package com.zinc.zoopy.waste;
 
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,7 +11,7 @@ import android.widget.Toast;
 
 import de.greenrobot.event.EventBus;
 
-public class EditCategory extends ActionBarActivity {
+public class EditCategory extends AppCompatActivity {
     EditText mCategoryEditText;
     Button mSaveButton;
     long mCategoryID;
@@ -35,7 +35,7 @@ public class EditCategory extends ActionBarActivity {
                 else {
                     mCategory.name = mCategoryEditText.getText().toString();
                     mCategory.save();
-                    EventBus.getDefault().post(new EventBusMessage());
+                    EventBus.getDefault().post(new EventBusDialogMessage());
                     finish();
                 }
             }

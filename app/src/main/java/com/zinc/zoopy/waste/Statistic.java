@@ -62,7 +62,7 @@ public class Statistic extends AppCompatActivity {
         EventBus.getDefault().unregister(this);
     }
 
-    public void onEvent(EventBusMessage event){
+    public void onEvent(EventBusDialogMessage event){
         getWastesSum();
     }
 

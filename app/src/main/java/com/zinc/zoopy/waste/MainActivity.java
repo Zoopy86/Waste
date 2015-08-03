@@ -16,9 +16,8 @@ import java.util.Calendar;
 
 import de.greenrobot.event.EventBus;
 
-
 public class MainActivity extends AppCompatActivity {
-
+    public static final String TAG = MainActivity.class.getSimpleName();
     private EditText mNumberInput;
     private EditText mTextInput;
     private TextView mDateTextView;
@@ -32,8 +31,8 @@ public class MainActivity extends AppCompatActivity {
     final Calendar c = Calendar.getInstance();
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onCreate(final Bundle bundle) {
+        super.onCreate(bundle);
         setContentView(R.layout.activity_main);
         initInstances();
         mSubmit.setOnClickListener(new View.OnClickListener() {
@@ -43,8 +42,36 @@ public class MainActivity extends AppCompatActivity {
                 resetInputs();
             }
         });
+        mPickCategoryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, PickCategory.class);
+                startActivity(intent);
+            }
+        });
 
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("amount", mNumberInput.getText().toString());
+        outState.putString("comment", mTextInput.getText().toString());
+        outState.putString("category", mPickCategoryButton.getText().toString());
+        outState.putString("date", mDateTextView.getText().toString());
+        outState.putString("time", mTimeTextView.getText().toString());
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        mNumberInput.setText(savedInstanceState.getString("amount"));
+        mTextInput.setText(savedInstanceState.getString("comment"));
+        mPickCategoryButton.setText(savedInstanceState.getString("category"));
+        mDateTextView.setText(savedInstanceState.getString("date"));
+        mTimeTextView.setText(savedInstanceState.getString("time"));
+    }
+
 
     void initInstances() {
         EventBus.getDefault().register(this);
@@ -57,17 +84,10 @@ public class MainActivity extends AppCompatActivity {
         mDateTextView.setText(Config.dateStringBuilder(c.get(Calendar.DAY_OF_MONTH), c.get(Calendar.MONTH), c.get(Calendar.YEAR)));
         mTimeTextView.setText(Config.timeStringBuilder(c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE)));
         mCategory = getIntent().getStringExtra("category_name");
-        if(mCategory == null || mCategory.matches("")){
+        if (mCategory == null || mCategory.matches("")) {
             mCategory = "No category";
         }
         mPickCategoryButton.setText(mCategory);
-        mPickCategoryButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, PickCategory.class);
-                startActivity(intent);
-            }
-        });
         mDateTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -98,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
         mMyTimePickerDialog.show(getSupportFragmentManager(), "timePicker");
     }
 
-    public void onEvent(EventBusMessage event) {
+    public void onEvent(EventBusDialogMessage event) {
         switch (event.dialogID) {
             case MyDatePickerDialog.DIALOG_ID:
                 updateDateView();
@@ -109,13 +129,23 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        EventBus.getDefault().unregister(this);
+    public void onEvent(EventBusCategoryMessage event) {
+        mPickCategoryButton.setText(event.category);
     }
 
-    //TODO refactor this code v1.0
+    @Override
+    protected void onStop() {
+        Log.d(TAG, "Activity stopped");
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        Log.d(TAG, "Activity destroyed");
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
+    }
+
     void saveInputs() {
         try {
             waste.amount = Float.parseFloat(mNumberInput.getText().toString());
@@ -131,7 +161,6 @@ public class MainActivity extends AppCompatActivity {
             showToast("Please, input number different from 0");
         }
     }
-
 
     void resetInputs() {
         mNumberInput.setText("");
