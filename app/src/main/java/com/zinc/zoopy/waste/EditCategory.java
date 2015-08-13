@@ -1,5 +1,6 @@
 package com.zinc.zoopy.waste;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -60,7 +61,10 @@ public class EditCategory extends AppCompatActivity {
         if (id == R.id.action_settings) {
             return true;
         }
-
+        if(id == R.id.action_new_waste){
+            Intent intent = new Intent(this, ActivityMain.class);
+            startActivity(intent);
+        }
         return super.onOptionsItemSelected(item);
     }
 }

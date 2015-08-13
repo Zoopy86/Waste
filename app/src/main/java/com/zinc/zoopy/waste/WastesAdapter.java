@@ -9,7 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import com.fortysevendeg.swipelistview.SwipeListView;
+
 import java.util.List;
 import de.greenrobot.event.EventBus;
 
@@ -20,7 +20,7 @@ public class WastesAdapter extends ArrayAdapter {
     private final Context mContext;
     private List<Waste> mWastes;
     public WastesAdapter(Context context, List<Waste> objects) {
-        super(context, R.layout.waste_item, objects);
+        super(context, R.layout.item_waste, objects);
         this.mContext = context;
         this.mWastes = objects;
     }
@@ -33,7 +33,7 @@ public class WastesAdapter extends ArrayAdapter {
 
         if(convertView == null) {
             LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.waste_item, parent, false);
+            convertView = inflater.inflate(R.layout.item_waste, parent, false);
 
             holder = new ViewHolder();
             holder.tvAmount = (TextView) convertView.findViewById(R.id.amount);
@@ -49,7 +49,6 @@ public class WastesAdapter extends ArrayAdapter {
             holder = (ViewHolder)convertView.getTag();
         }
 
-        ((SwipeListView)parent).recycle(convertView, position);
 
         holder.tvAmount.setText(""+ waste.amount);
         holder.tvUserNote.setText(waste.category + ": " + waste.userNote);
@@ -57,7 +56,7 @@ public class WastesAdapter extends ArrayAdapter {
         holder.bEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mContext, EditWasteActivity.class);
+                Intent intent = new Intent(mContext, ActivityEditWaste.class);
                 intent.putExtra("id", waste.getId());
                 mContext.startActivity(intent);
             }
@@ -67,7 +66,6 @@ public class WastesAdapter extends ArrayAdapter {
             @Override
             public void onClick(View v) {
                 waste.delete();
-                ((SwipeListView)parent).dismiss(position);
                 remove(mWastes.get(position));
                 notifyDataSetChanged();
                 EventBus.getDefault().post(new EventBusDialogMessage());

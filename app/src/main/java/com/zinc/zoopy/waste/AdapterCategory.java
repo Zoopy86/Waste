@@ -9,9 +9,9 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.fortysevendeg.swipelistview.SwipeListView;
+
+import com.daimajia.swipe.SwipeLayout;
 
 import java.util.List;
 
@@ -20,13 +20,13 @@ import de.greenrobot.event.EventBus;
 /**
  * Created by Administrator on 02-08-15.
  */
-public class CategoryAdapter extends ArrayAdapter {
+public class AdapterCategory extends ArrayAdapter {
 
     private final Context mContext;
     private List<Category> mCategories;
 
-    public CategoryAdapter(Context context, List<Category> categories) {
-        super(context, R.layout.category_item, categories);
+    public AdapterCategory(Context context, List<Category> categories) {
+        super(context, R.layout.item_category, categories);
         this.mContext = context;
         this.mCategories = categories;
         EventBus.getDefault().register(this);
@@ -43,7 +43,7 @@ public class CategoryAdapter extends ArrayAdapter {
 
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.category_item, parent, false);
+            convertView = inflater.inflate(R.layout.item_category, parent, false);
 
             holder = new ViewHolder();
             holder.tvCategory = (TextView) convertView.findViewById(R.id.tv_category);
@@ -53,7 +53,6 @@ public class CategoryAdapter extends ArrayAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        ((SwipeListView) parent).closeAnimate(position);
         holder.tvCategory.setText(category.name);
 
         holder.tvCategory.setOnClickListener(new View.OnClickListener() {
@@ -61,6 +60,7 @@ public class CategoryAdapter extends ArrayAdapter {
             public void onClick(View view) {
                 EventBus.getDefault().post(new EventBusCategoryMessage(category.name));
                 ((Activity) mContext).finish();
+                ((Activity) mContext).overridePendingTransition(R.anim.move_right2, R.anim.move_right);
             }
         });
         holder.bEdit.setOnClickListener(new View.OnClickListener() {
@@ -75,8 +75,7 @@ public class CategoryAdapter extends ArrayAdapter {
             @Override
             public void onClick(View view) {
                 category.delete();
-                ((SwipeListView) parent).closeAnimate(position);
-                ((SwipeListView) parent).dismiss(position);
+                parent.removeViewAt(position);
                 remove(mCategories.get(position));
                 notifyDataSetChanged();
             }

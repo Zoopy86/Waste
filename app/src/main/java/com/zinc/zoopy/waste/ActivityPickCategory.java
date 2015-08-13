@@ -9,10 +9,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 
-public class PickCategory extends AppCompatActivity {
+public class ActivityPickCategory extends AppCompatActivity {
     ListView mListView;
     Button mAddCategoryButton;
-    CategoryAdapter mCategoryAdapter;
+    AdapterCategory mAdapterCategory;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,13 +21,14 @@ public class PickCategory extends AppCompatActivity {
         mListView = (ListView)findViewById(R.id.category_listview);
         mAddCategoryButton = (Button)findViewById(R.id.b_add_new_category);
 
-        mCategoryAdapter = new CategoryAdapter(this, Category.getAll());
-        mListView.setAdapter(mCategoryAdapter);
+        mAdapterCategory = new AdapterCategory(this, Category.getAll());
+        mListView.setAdapter(mAdapterCategory);
         mAddCategoryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(PickCategory.this, AddCategory.class);
+                Intent intent = new Intent(ActivityPickCategory.this, ActivityAddCategory.class);
                 startActivity(intent);
+                overridePendingTransition(R.anim.move_left, R.anim.move_left2);
             }
         });
 
@@ -41,7 +42,7 @@ public class PickCategory extends AppCompatActivity {
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar waste_item clicks here. The action bar will
+        // Handle action bar item_waste clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();

@@ -8,4 +8,6 @@
           app:showAsAction="never"/>
     <item android:id="@+id/statistic"
           android:title="Statistic"/>
+    <item android:id="@+id/journal"
+          android:title="Journal"/>
 </menu>

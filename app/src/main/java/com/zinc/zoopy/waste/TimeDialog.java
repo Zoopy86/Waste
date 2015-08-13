@@ -13,7 +13,7 @@ import de.greenrobot.event.EventBus;
 /**
  * Created by Administrator on 01-08-15.
  */
-public class MyTimePickerDialog extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
+public class TimeDialog extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
     public static final int DIALOG_ID = 1;
     int pHour;
     int pMinute;

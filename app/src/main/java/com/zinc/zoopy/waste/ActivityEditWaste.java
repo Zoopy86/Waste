@@ -1,10 +1,12 @@
 package com.zinc.zoopy.waste;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,7 +20,7 @@ import android.widget.TextView;
 import de.greenrobot.event.EventBus;
 
 
-public class EditWasteActivity extends AppCompatActivity {
+public class ActivityEditWaste extends AppCompatActivity {
 
     public static long mID;
 
@@ -43,7 +45,7 @@ public class EditWasteActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar waste_item clicks here. The action bar will
+        // Handle action bar item_waste clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
@@ -51,6 +53,10 @@ public class EditWasteActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+        }
+        if(id == R.id.action_new_waste){
+            Intent intent = new Intent(this, ActivityMain.class);
+            startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -67,9 +73,9 @@ public class EditWasteActivity extends AppCompatActivity {
         TextView mDateTextView;
         TextView mTimeTextView;
         Waste waste = Waste.load(Waste.class, mID);
-
-        MyDatePickerDialog mMyDatePickerDialog = new MyDatePickerDialog();
-        MyTimePickerDialog mMyTimePickerDialog = new MyTimePickerDialog();
+        Button mCategoryButton;
+        DateDialog mDateDialog = new DateDialog();
+        TimeDialog mTimeDialog = new TimeDialog();
 
         public PlaceholderFragment() {
         }
@@ -81,17 +87,27 @@ public class EditWasteActivity extends AppCompatActivity {
             EventBus.getDefault().register(this);
             final View rootView = inflater.inflate(R.layout.fragment_edit_waste, container, false);
             amount = (EditText) rootView.findViewById(R.id.ewa_et_amount);
+            amount.setInputType(InputType.TYPE_NULL);
             userNote = (EditText) rootView.findViewById(R.id.ewa_et_usernote);
             mSaveButton = (Button) rootView.findViewById(R.id.ewa_b_save);
             mContext = rootView.getContext();
             mDateTextView = (TextView) rootView.findViewById(R.id.tv_date);
             mTimeTextView = (TextView) rootView.findViewById(R.id.tv_time);
+            mCategoryButton = (Button)rootView.findViewById(R.id.b_pick_category);
 
-
+            mCategoryButton.setText(waste.category);
             amount.setText(waste.amount.toString());
             userNote.setText(waste.userNote);
             mDateTextView.setText(waste.dayAdded);
             mTimeTextView.setText(waste.timeAdded);
+            mCategoryButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(mContext, ActivityPickCategory.class);
+                    startActivity(intent);
+                    ((Activity)mContext).overridePendingTransition(R.anim.move_left, R.anim.move_left2);
+                }
+            });
             mSaveButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -101,8 +117,7 @@ public class EditWasteActivity extends AppCompatActivity {
                         Log.e("logtag", "Exception: " + e.toString());
                     }
                     waste.userNote = userNote.getText().toString();
-                    //TODO get selected category
-                    waste.category = "Default";
+                    waste.category = mCategoryButton.getText().toString();
                     waste.dayAdded = mDateTextView.getText().toString();
                     waste.timeAdded = mTimeTextView.getText().toString();
                     waste.save();
@@ -126,35 +141,38 @@ public class EditWasteActivity extends AppCompatActivity {
         }
 
         private void updateTimeView() {
-            this.mTimeTextView.setText(Config.timeStringBuilder(mMyTimePickerDialog.pHour, mMyTimePickerDialog.pMinute));
+            this.mTimeTextView.setText(Config.timeStringBuilder(mTimeDialog.pHour, mTimeDialog.pMinute));
         }
 
         private void updateDateView() {
-            this.mDateTextView.setText(Config.dateStringBuilder(mMyDatePickerDialog.pDay, mMyDatePickerDialog.pMonth, mMyDatePickerDialog.pYear));
+            this.mDateTextView.setText(Config.dateStringBuilder(mDateDialog.pDay, mDateDialog.pMonth, mDateDialog.pYear));
         }
 
         public void onEvent(EventBusDialogMessage event) {
             switch (event.dialogID) {
-                case MyDatePickerDialog.DIALOG_ID:
+                case DateDialog.DIALOG_ID:
                     updateDateView();
                     break;
-                case MyTimePickerDialog.DIALOG_ID:
+                case TimeDialog.DIALOG_ID:
                     updateTimeView();
                     break;
             }
         }
+        public void onEvent(EventBusCategoryMessage event) {
+            mCategoryButton.setText(event.category);
+        }
 
         public void setDate() {
-            mMyDatePickerDialog.show(getActivity().getSupportFragmentManager(), "datePicker");
+            mDateDialog.show(getActivity().getSupportFragmentManager(), "datePicker");
         }
 
         public void setTime() {
-            mMyTimePickerDialog.show(getActivity().getSupportFragmentManager(), "timePicker");
+            mTimeDialog.show(getActivity().getSupportFragmentManager(), "timePicker");
         }
 
         @Override
-        public void onStop() {
-            super.onStop();
+        public void onDestroy() {
+            super.onDestroy();
             EventBus.getDefault().unregister(this);
         }
     }

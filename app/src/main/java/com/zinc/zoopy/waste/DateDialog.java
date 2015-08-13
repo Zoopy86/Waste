@@ -13,7 +13,7 @@ import de.greenrobot.event.EventBus;
 /**
  * Created by Administrator on 01-08-15.
  */
-public class MyDatePickerDialog extends DialogFragment implements DatePickerDialog.OnDateSetListener{
+public class DateDialog extends DialogFragment implements DatePickerDialog.OnDateSetListener{
     public static final int DIALOG_ID = 0;
     int pYear;
     int pDay;
@@ -35,6 +35,7 @@ public class MyDatePickerDialog extends DialogFragment implements DatePickerDial
         return new DatePickerDialog(getActivity(), this, year, month, day);
     }
 
+    @Override
     public void onDateSet(DatePicker view, int year, int month, int day) {
         pYear = year;
         pDay = day;

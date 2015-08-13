@@ -7,9 +7,9 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme" >
         <activity
-            android:name=".MainActivity"
+            android:name=".ActivityMain"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,11 +29,7 @@
             android:value="com.zinc.zoopy.waste.model.Waste, com.zinc.zoopy.waste.model.Category" />
 
         <activity
-            android:name=".Statistic"
-            android:label="@string/title_activity_statistic" >
-        </activity>
-        <activity
-            android:name=".EditWasteActivity"
+            android:name=".ActivityEditWaste"
             android:label="@string/title_activity_edit_waste"
             android:parentActivityName=".Statistic" >
             <meta-data
@@ -41,24 +37,48 @@
                 android:value="com.zinc.zoopy.waste.Statistic" />
         </activity>
         <activity
-            android:name=".PickCategory"
+            android:name=".ActivityPickCategory"
             android:label="@string/title_activity_pick_category" >
         </activity>
         <activity
             android:name=".EditCategory"
             android:label="@string/title_activity_edit_category"
-            android:parentActivityName=".PickCategory" >
+            android:parentActivityName=".ActivityPickCategory" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.zinc.zoopy.waste.PickCategory" />
+                android:value=".ActivityPickCategory" />
         </activity>
         <activity
-            android:name=".AddCategory"
+            android:name=".ActivityAddCategory"
             android:label="@string/title_activity_add_category"
-            android:parentActivityName=".PickCategory" >
+            android:parentActivityName=".ActivityPickCategory" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.zinc.zoopy.waste.PickCategory" />
+                android:value=".ActivityPickCategory" />
+        </activity>
+        <activity
+            android:name=".ActivityJournal"
+            android:label="@string/title_activity_journal" >
+        </activity>
+        <activity
+            android:name=".ActivityJournalMonth"
+            android:label="@string/title_activity_activity_journal_month"
+            android:parentActivityName=".ActivityJournal" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.zinc.zoopy.waste.ActivityJournal" />
+        </activity>
+        <activity
+            android:name=".Statistic"
+            android:label="@string/title_activity_statistic">
+        </activity>
+        <activity
+            android:name=".ActivityDayEntries"
+            android:label="@string/title_activity_activity_day_entries"
+            android:parentActivityName=".ActivityJournalMonth" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.zinc.zoopy.waste.ActivityJournalMonth" />
         </activity>
     </application>
 

@@ -1,6 +1,7 @@
 package com.zinc.zoopy.waste;
 
 import android.content.Intent;
+import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -13,13 +14,11 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import de.greenrobot.event.EventBus;
 
-
-public class Statistic extends AppCompatActivity {
+public class ActivityDayEntries extends AppCompatActivity {
     ListView mListView;
     Spinner mSortSpinner;
     WastesAdapter mWastesAdapter;
@@ -40,19 +39,15 @@ public class Statistic extends AppCompatActivity {
         inflateSpinner();
         date = getIntent().getStringExtra("date");
         mWasteList = Waste.getByDay(date);
-        Log.d("wListStatistic", "List SIZE" + mWasteList.size());
-
-        //Log.d("WASTE", "" + mWasteList.get(0).dayAdded);
-        Log.d("wListStatistic", "List SIZE" + mWasteList.size());
         mWastesAdapter = new WastesAdapter(this, mWasteList);
         mListView.setAdapter(mWastesAdapter);
-
+        setTitle(Config.dayFormat(date));
         getWastesSum();
 
         mSortSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                mWastesAdapter = new WastesAdapter(Statistic.this, mWasteList);
+                mWastesAdapter = new WastesAdapter(ActivityDayEntries.this, mWasteList);
                 mListView.setAdapter(mWastesAdapter);
             }
 
@@ -97,7 +92,7 @@ public class Statistic extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_statistic, menu);
+        getMenuInflater().inflate(R.menu.menu_activity_day_entries, menu);
         return true;
     }
 
@@ -107,21 +102,18 @@ public class Statistic extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if(id == android.R.id.home){
-            Intent intent = new Intent(this, ActivityJournalMonth.class);
-            intent.putExtra("date", date);
-            startActivity(intent);
-            overridePendingTransition(R.anim.move_right2, R.anim.move_right);
-        }
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+        }
+        if(id == android.R.id.home){
+            finish();
+            overridePendingTransition(R.anim.move_right2,R.anim.move_right);
         }
         if(id == R.id.action_new_waste){
             Intent intent = new Intent(this, ActivityMain.class);
             startActivity(intent);
         }
-
         return super.onOptionsItemSelected(item);
     }
 }
