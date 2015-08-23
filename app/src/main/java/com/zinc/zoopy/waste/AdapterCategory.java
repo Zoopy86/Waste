@@ -11,16 +11,14 @@ import android.widget.Button;
 import android.widget.TextView;
 
 
-import com.daimajia.swipe.SwipeLayout;
-
 import java.util.List;
 
 import de.greenrobot.event.EventBus;
 
 /**
- * Created by Administrator on 02-08-15.
+ * Created by Zoopy86 on 02-08-15.
  */
-public class AdapterCategory extends ArrayAdapter {
+public class AdapterCategory extends ArrayAdapter{
 
     private final Context mContext;
     private List<Category> mCategories;
@@ -32,14 +30,14 @@ public class AdapterCategory extends ArrayAdapter {
         EventBus.getDefault().register(this);
     }
 
-    public void onEvent(EventBusDialogMessage event) {
+    public void onEvent(EventDialog event) {
         notifyDataSetChanged();
     }
 
     @Override
     public View getView(final int position, View convertView, final ViewGroup parent) {
         ViewHolder holder;
-        final Category category = mCategories.get(position);
+        final Category Category = mCategories.get(position);
 
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -53,12 +51,12 @@ public class AdapterCategory extends ArrayAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        holder.tvCategory.setText(category.name);
+        holder.tvCategory.setText(Category.name);
 
         holder.tvCategory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EventBus.getDefault().post(new EventBusCategoryMessage(category.name));
+                EventBus.getDefault().post(new EventCategory(Category.name));
                 ((Activity) mContext).finish();
                 ((Activity) mContext).overridePendingTransition(R.anim.move_right2, R.anim.move_right);
             }
@@ -66,16 +64,15 @@ public class AdapterCategory extends ArrayAdapter {
         holder.bEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(mContext, EditCategory.class);
-                intent.putExtra("category_id", category.getId());
+                Intent intent = new Intent(mContext, ActivityEditCategory.class);
+                intent.putExtra("category_id", Category.getId());
                 mContext.startActivity(intent);
             }
         });
         holder.bDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                category.delete();
-                parent.removeViewAt(position);
+                Category.delete();
                 remove(mCategories.get(position));
                 notifyDataSetChanged();
             }

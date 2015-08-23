@@ -24,14 +24,14 @@ public class ActivityAddCategory extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(Config.isEmpty(mEditText)){
-                    Toast.makeText(ActivityAddCategory.this, "Please, enter some letters", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ActivityAddCategory.this, R.string.error_empty_category, Toast.LENGTH_SHORT).show();
                 }
                 else {
                     mCategory = new Category();
                     mCategory.name = mEditText.getText().toString();
                     mCategory.save();
                     mEditText.getText().clear();
-                    Toast.makeText(ActivityAddCategory.this, "Added new category: " + mCategory.name, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ActivityAddCategory.this, getString(R.string.added_new_category) + mCategory.name, Toast.LENGTH_SHORT).show();
                 }
             }
         });

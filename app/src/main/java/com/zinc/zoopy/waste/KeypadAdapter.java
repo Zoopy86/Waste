@@ -8,7 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 
 /**
- * Created by Administrator on 04-08-15.
+ * Created by Zoopy86 on 04-08-15.
  */
 public class KeypadAdapter extends BaseAdapter {
     private Context mContext;
@@ -40,7 +40,9 @@ public class KeypadAdapter extends BaseAdapter {
         Button btn;
         if (convertView == null) { // if it's not recycled, initialize some attributes
             btn = new Button(mContext);
-            btn.setTextColor(Color.WHITE);
+            if(mButtons[position].getText().equals("Close"))btn.setTextColor(Color.rgb(195, 50,0));
+            else btn.setTextColor(Color.WHITE);
+
             KeypadButton keypadButton = mButtons[position];
             if (keypadButton != KeypadButton.NONE) {
                 btn.setOnClickListener(mOnButtonClick);

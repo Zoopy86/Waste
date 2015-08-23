@@ -7,7 +7,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     swipe:leftEdgeSwipeOffset="0dp"
-    swipe:rightEdgeSwipeOffset="0dp">
+    swipe:rightEdgeSwipeOffset="0dp"
+    swipe:drag_edge="left">
 
     <LinearLayout
         android:id="@+id/back"
@@ -15,6 +16,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:gravity="center"
+        android:layout_gravity="left"
         android:background="#a1a1a1"
         android:orientation="horizontal"
         android:tag="waste_item_bottom">

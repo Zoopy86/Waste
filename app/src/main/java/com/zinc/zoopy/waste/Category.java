@@ -1,7 +1,6 @@
 package com.zinc.zoopy.waste;
 
 import android.provider.BaseColumns;
-import android.util.Log;
 
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
@@ -21,9 +20,15 @@ public class Category extends Model {
     }
 
     public static List<Category> getAll() {
-        List<Category> list = new Select()
+        return new Select()
                 .from(Category.class)
                 .execute();
-        return list;
+    }
+    public static String[] getAllInArray(){
+        String[] cats = new String[getAll().size()];
+        for (int i = 0; i < cats.length; i++) {
+            cats[i] = getAll().get(i).name;
+        }
+        return cats;
     }
 }

@@ -2,6 +2,7 @@ package com.zinc.zoopy.waste;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.util.Log;
@@ -63,6 +64,7 @@ public class ActivityMain extends AppCompatActivity {
                 overridePendingTransition(R.anim.move_left, R.anim.move_left2);
             }
         });
+        Log.d(TAG, "Sorted Waste size: " + Waste.getWhere("Products", "Tickets").size());
     }
 
     @Override
@@ -76,7 +78,7 @@ public class ActivityMain extends AppCompatActivity {
     }
 
     @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         mNumberInput.setText(savedInstanceState.getString("amount"));
         mTextInput.setText(savedInstanceState.getString("comment"));
@@ -147,8 +149,6 @@ public class ActivityMain extends AppCompatActivity {
                 }
             }
         });
-
-        Log.d(TAG, "Bottom" + mKeypadGrid.getBottom());
     }
 
     private void updateTimeView() {
@@ -169,7 +169,7 @@ public class ActivityMain extends AppCompatActivity {
         mTimeDialog.show(getSupportFragmentManager(), "timePicker");
     }
 
-    public void onEvent(EventBusDialogMessage event) {
+    public void onEvent(EventDialog event) {
         switch (event.dialogID) {
             case DateDialog.DIALOG_ID:
                 updateDateView();
@@ -180,7 +180,7 @@ public class ActivityMain extends AppCompatActivity {
         }
     }
 
-    public void onEvent(EventBusCategoryMessage event) {
+    public void onEvent(EventCategory event) {
         mPickCategoryButton.setText(event.category);
     }
 
@@ -198,27 +198,27 @@ public class ActivityMain extends AppCompatActivity {
     }
 
     void saveInputs() {
-        Waste waste = new Waste();
+        Waste Waste = new Waste();
         try {
-            waste.amount = Float.parseFloat(mNumberInput.getText().toString());
-            if (waste.amount == 0) {
-                showToast("Please, input number different from 0");
+            Waste.amount = Float.parseFloat(mNumberInput.getText().toString());
+            if (Waste.amount == 0) {
+                showToast(getString(R.string.error_empty_amount));
             } else {
-                waste.category = mPickCategoryButton.getText().toString();
-                waste.unixTime = System.currentTimeMillis();
-                waste.dayAdded = mDateToSave;
-                waste.timeAdded = mTimeTextView.getText().toString();
-                waste.userNote = mTextInput.getText().toString();
-                waste.save();
+                Waste.category = mPickCategoryButton.getText().toString();
+                Waste.unixTime = System.currentTimeMillis();
+                Waste.dayAdded = mDateToSave;
+                Waste.timeAdded = mTimeTextView.getText().toString();
+                Waste.userNote = mTextInput.getText().toString();
+                Waste.save();
                 resetInputs();
-                showToast("Amount: " + waste.amount + ". \nCategory: " + waste.category + ". \nComment: " + waste.userNote + ". \nDate: " + waste.dayAdded);
-                for(Waste w: Waste.getBetweenDate("2015-07-29", "2015-07-31")) {
-                    Log.d(TAG, "First by date:" + w.dayAdded + " ID " + w.getId());
-                }
+                showToast(getString(R.string.amount) + ": " + Waste.amount + ". \n" +
+                        getString(R.string.category) + ": " + Waste.category + ". \n" +
+                        getString(R.string.comment) + ": "+ Waste.userNote + ". \n" +
+                        getString(R.string.date) + ": " + Waste.dayAdded);
             }
         } catch (Exception e) {
             Log.d("Invalid Input", "Exception: " + e.toString());
-            showToast("Please, input some amount");
+            showToast(getString(R.string.error_empty_amount));
         }
     }
 
@@ -246,8 +246,8 @@ public class ActivityMain extends AppCompatActivity {
         if (id == R.id.action_settings) {
             return true;
         }
-        if (id == R.id.statistic) {
-            Intent intent = new Intent(getApplicationContext(), Statistic.class);
+        if (id == R.id.report) {
+            Intent intent = new Intent(getApplicationContext(), ActivityReport.class);
             startActivity(intent);
         }
         if(id == R.id.journal){
@@ -295,8 +295,7 @@ public class ActivityMain extends AppCompatActivity {
         String text = keypadButton.getText().toString();
         String currentInput = mNumberInput.getText().toString();
         int currentInputLen = currentInput.length();
-        String evalResult = null;
-        double userInputValue = Double.NaN;
+        String evalResult;
         switch (keypadButton) {
             case CLOSE:
                 if (keypadIsOpen) {
@@ -331,7 +330,7 @@ public class ActivityMain extends AppCompatActivity {
                 break;
             case SIGN: // Handle -/+ sign
                 // input has text and is different than initial value 0
-                if (currentInputLen > 0 && currentInput != "0") {
+                if (currentInputLen > 0 && !currentInput.equals("0")) {
                     // Already has (-) sign. Remove that sign
                     if (currentInput.charAt(0) == '-') {
                         mNumberInput.setText
@@ -438,8 +437,8 @@ public class ActivityMain extends AppCompatActivity {
         if (!requestedByUser)
             tmp = mOperationStack.get(3);
 
-        double leftVal = Double.parseDouble(left.toString());
-        double rightVal = Double.parseDouble(right.toString());
+        double leftVal = Double.parseDouble(left);
+        double rightVal = Double.parseDouble(right);
         double result = Double.NaN;
 
         if (operator.equals(KeypadButton.DIVIDE.getText())) {
@@ -477,17 +476,18 @@ public class ActivityMain extends AppCompatActivity {
 
     }
 
-    private double tryParseUserInput() {
-        String inputStr = mNumberInput.getText().toString();
-        double result = Double.NaN;
-        try {
-            result = Double.parseDouble(inputStr);
-
-        } catch (NumberFormatException nfe) {
-        }
-        return result;
-
-    }
+//    private double tryParseUserInput() {
+//        String inputStr = mNumberInput.getText().toString();
+//        double result = Double.NaN;
+//        try {
+//            result = Double.parseDouble(inputStr);
+//
+//        } catch (NumberFormatException nfe) {
+//
+//        }
+//        return result;
+//
+//    }
     //endregion
 
 }

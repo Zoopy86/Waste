@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 import de.greenrobot.event.EventBus;
 
-public class EditCategory extends AppCompatActivity {
+public class ActivityEditCategory extends AppCompatActivity {
     EditText mCategoryEditText;
     Button mSaveButton;
     long mCategoryID;
@@ -31,12 +31,12 @@ public class EditCategory extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(Config.isEmpty(mCategoryEditText)){
-                    Toast.makeText(EditCategory.this, "Please, enter some letters", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ActivityEditCategory.this, R.string.error_empty_category, Toast.LENGTH_SHORT).show();
                 }
                 else {
                     mCategory.name = mCategoryEditText.getText().toString();
                     mCategory.save();
-                    EventBus.getDefault().post(new EventBusDialogMessage());
+                    EventBus.getDefault().post(new EventDialog());
                     finish();
                 }
             }

@@ -34,4 +34,5 @@ public enum KeypadButton{
     public CharSequence getText() {
         return mText;
     }
+    public KeypadButtonCategory getCategory(){return mCategory;}
 }

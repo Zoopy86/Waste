@@ -1,6 +1,7 @@
 package com.zinc.zoopy.waste;
 
 import android.app.Application;
+import android.content.Context;
 import android.util.Log;
 import android.widget.EditText;
 
@@ -9,25 +10,32 @@ import com.activeandroid.ActiveAndroid;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 /**
- * Created by Administrator on 28-07-15.
+ * Created by Zoopy86 on 28-07-15.
  */
 public class Config extends Application {
-    private String[] mCategories = {"Products", "Electronics", "Leisure Time", "Tickets"};
-    public static String wasteDate;
+    private String[] mDefaultCategories;
+    public static String wasteDate; //For getting back from activity purposes
+    public static String reportPeriod; //For getting back from activity purposes
+    public static String[] selectedCategories;
+    public static List<Waste> wastesToShow;
+    public static Context context;
     @Override
     public void onCreate() {
         super.onCreate();
+        context = getApplicationContext();
         ActiveAndroid.initialize(this, true);
+        mDefaultCategories = getResources().getStringArray(R.array.default_categories_array);
         if(Category.getAll().isEmpty()){
             ActiveAndroid.beginTransaction();
             try {
-                for (int i = 0; i < mCategories.length; i++) {
-                    Category category = new Category();
-                    category.name = mCategories[i];
-                    category.save();
-                    Log.d("CAT", "Saved category: " + category.name);
+                for (String cat: mDefaultCategories) {
+                    Category Category = new Category();
+                    Category.name = cat;
+                    Category.save();
+                    Log.d("CAT", "Added Category: " + Category.name);
                 }
                 ActiveAndroid.setTransactionSuccessful();
             }
@@ -35,10 +43,13 @@ public class Config extends Application {
                 ActiveAndroid.endTransaction();
             }
         }
+
     }
+
+    //3 jun 1889
     public static String dayFormat(String dayAdded){
         SimpleDateFormat simpleDateFormatIn = new SimpleDateFormat("yyyy-MM-dd");
-        SimpleDateFormat simpleDateFormatOut = new SimpleDateFormat("dd MMMM yyyy");
+        SimpleDateFormat simpleDateFormatOut = new SimpleDateFormat("d MMMM yyyy");
         Date date;
         try {
             date = simpleDateFormatIn.parse(dayAdded);
@@ -48,10 +59,10 @@ public class Config extends Application {
         }
         return simpleDateFormatOut.format(date);
     }
-
+    //May 2015
     public static String monthFormat(String dayAdded){
         SimpleDateFormat simpleDateFormatIn = new SimpleDateFormat("yyyy-MM-dd");
-        SimpleDateFormat simpleDateFormatOut = new SimpleDateFormat("MMMM yyyy");
+        SimpleDateFormat simpleDateFormatOut = new SimpleDateFormat("MMMM yy");
         Date date;
         try {
             date = simpleDateFormatIn.parse(dayAdded);
@@ -61,7 +72,6 @@ public class Config extends Application {
         }
         return simpleDateFormatOut.format(date);
     }
-
     public static StringBuilder dateStringBuilder(int d, int m, int y) {
         m = m + 1;
         String mD , mM, mY;
@@ -88,7 +98,6 @@ public class Config extends Application {
             case Amount: return "Amount";
             case TimeAdded: return "Time Added";
             case UnixTime: return "Unix Time";
-            case Currency: return "Currency";
             case UserNote: return "User Note";
             default: return "";
         }

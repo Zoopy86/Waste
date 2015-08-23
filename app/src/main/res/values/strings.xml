@@ -3,19 +3,66 @@
 
     <string name="app_name">Waste</string>
     <string name="action_settings">Settings</string>
-    <string name="spent">Amount:</string>
+    <string name="amount">Amount</string>
     <string name="submit_button">Save</string>
-    <string name="reason_text">Comment:</string>
-    <string name="title_activity_statistic">Statistic</string>
-    <string name="title_activity_edit_waste">Edit Entry</string>
-    <string name="category">Category: </string>
+    <string name="comment">Comment</string>
+    <string name="title_activity_statistic">Sorted Records</string>
+    <string name="title_activity_edit_waste">Edit Record</string>
+    <string name="category">Category</string>
     <string name="title_activity_edit_category">Edit Category</string>
     <string name="title_activity_pick_category">Pick Category</string>
     <string name="title_activity_add_category">Add Category</string>
-    <string name="title_activity_journal">journal</string>
+    <string name="title_activity_journal">Journal</string>
 
     <string name="hello_world">Hello world!</string>
-    <string name="title_activity_activity_journal_month">ActivityJournalMonth</string>
-    <string name="title_activity_activity_day_entries">ActivityDayEntries</string>
+    <string name="title_activity_journal_month">Months</string>
+    <string name="title_activity_day_entries">Days</string>
+    <string name="title_menu_report">Report</string>
+    <string name="title_activity_activity_report">Report</string>
+    <string name="Period">Period</string>
+    <string name="Result">Result</string>
+    <string name="title_activity_activity_period">Period</string>
+    <string name="ok">OK</string>
+
+    <string name="period_all">All time</string>
+    <string name="period_today">Today</string>
+    <string name="period_this_week">This week</string>
+    <string name="period_this_month">This month</string>
+    <string name="period_last_month">Last month</string>
+    <string name="period_this_year">This year</string>
+    <string name="period_last_year">Last year</string>
+
+    <string name="category_default_1">Products</string>
+    <string name="category_default_2">Electronics</string>
+    <string name="category_default_3">Leisure Time</string>
+    <string name="category_default_4">Tickets</string>
+
+    <string-array name="default_categories_array">
+        <item>@string/category_default_1</item>
+        <item>@string/category_default_2</item>
+        <item>@string/category_default_3</item>
+        <item>@string/category_default_4</item>
+    </string-array>
+
+    <string-array name="periods_array">
+        <item>@string/period_all</item>
+        <item>@string/period_today</item>
+        <item>@string/period_this_week</item>
+        <item>@string/period_this_month</item>
+        <item>@string/period_last_month</item>
+        <item>@string/period_this_year</item>
+        <item>@string/period_last_year</item>
+    </string-array>
+    <string name="title_activity_activity_pick_categories">ActivityPickCategories</string>
+    <string name="error_empty_category">Please, enter some letters</string>
+    <string name="added_new_category">"Added new category: "</string>
+    <string name="total_wasted">"Wasted: "</string>
+    <string name="error_empty_amount">Please, input number different from 0</string>
+    <string name="date">Date</string>
+    <string name="error_no_category_selected">At least one category should be picked</string>
+    <string name="all">All</string>
+    <string name="of">" of "</string>
+    <string name="entries">Entries</string>
+    <string name="sum">Sum</string>
 
 </resources>

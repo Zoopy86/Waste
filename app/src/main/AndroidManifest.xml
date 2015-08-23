@@ -14,7 +14,7 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.Category.LAUNCHER" />
             </intent-filter>
         </activity>
 
@@ -26,22 +26,22 @@
             android:value="1" />
         <meta-data
             android:name="AA_MODELS"
-            android:value="com.zinc.zoopy.waste.model.Waste, com.zinc.zoopy.waste.model.Category" />
+            android:value="com.zinc.zoopy.Waste.model.Waste, com.zinc.zoopy.Waste.model.Category" />
 
         <activity
             android:name=".ActivityEditWaste"
             android:label="@string/title_activity_edit_waste"
-            android:parentActivityName=".Statistic" >
+            android:parentActivityName=".ActivitySortedEntries" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.zinc.zoopy.waste.Statistic" />
+                android:value=".ActivitySortedEntries" />
         </activity>
         <activity
             android:name=".ActivityPickCategory"
             android:label="@string/title_activity_pick_category" >
         </activity>
         <activity
-            android:name=".EditCategory"
+            android:name=".ActivityEditCategory"
             android:label="@string/title_activity_edit_category"
             android:parentActivityName=".ActivityPickCategory" >
             <meta-data
@@ -61,24 +61,44 @@
             android:label="@string/title_activity_journal" >
         </activity>
         <activity
-            android:name=".ActivityJournalMonth"
-            android:label="@string/title_activity_activity_journal_month"
+            android:name=".ActivityJournalMonths"
+            android:label="@string/title_activity_journal_month"
             android:parentActivityName=".ActivityJournal" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.zinc.zoopy.waste.ActivityJournal" />
         </activity>
         <activity
-            android:name=".Statistic"
-            android:label="@string/title_activity_statistic">
+            android:name=".ActivitySortedEntries"
+            android:label="@string/title_activity_statistic" >
         </activity>
         <activity
-            android:name=".ActivityDayEntries"
-            android:label="@string/title_activity_activity_day_entries"
-            android:parentActivityName=".ActivityJournalMonth" >
+            android:name=".ActivityDayRecords"
+            android:label="@string/title_activity_day_entries"
+            android:parentActivityName=".ActivityJournalMonths" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.zinc.zoopy.waste.ActivityJournalMonth" />
+                android:value=".ActivityJournalMonths" />
+        </activity>
+        <activity
+            android:name=".ActivityReport"
+            android:label="@string/title_activity_activity_report" >
+        </activity>
+        <activity
+            android:name=".ActivityPeriod"
+            android:label="@string/title_activity_activity_period"
+            android:parentActivityName=".ActivityReport" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.zinc.zoopy.waste.ActivityReport" />
+        </activity>
+        <activity
+            android:name=".ActivityPickCategories"
+            android:label="@string/title_activity_activity_pick_categories"
+            android:parentActivityName=".ActivityReport" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.zinc.zoopy.waste.ActivityReport" />
         </activity>
     </application>
 

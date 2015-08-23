@@ -2,19 +2,17 @@ package com.zinc.zoopy.waste;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-public class ActivityJournalMonth extends AppCompatActivity {
-
+public class ActivityJournalMonths extends AppCompatActivity {
+    //TODO: Make ListView as swipe view
     private ListView mListView;
-    private AdapterJournalDay mAdapterJournalDay;
+    private AdapterJournalDays mAdapterJournalDays;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,18 +23,23 @@ public class ActivityJournalMonth extends AppCompatActivity {
         }
         mListView = (ListView)findViewById(R.id.journal_list_days);
         setTitle(Config.monthFormat(Config.wasteDate));
-        mAdapterJournalDay = new AdapterJournalDay(this, Waste.groupByDay(Config.wasteDate));
-        mListView.setAdapter(mAdapterJournalDay);
+        mAdapterJournalDays = new AdapterJournalDays(this, Waste.groupByDay(Config.wasteDate));
+        mListView.setAdapter(mAdapterJournalDays);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long arg) {
-                Waste waste = (Waste) mListView.getItemAtPosition(position);
-                Intent intent = new Intent(ActivityJournalMonth.this, ActivityDayEntries.class);
-                intent.putExtra("date", waste.dayAdded);
+                Waste Waste = (Waste) mListView.getItemAtPosition(position);
+                Intent intent = new Intent(ActivityJournalMonths.this, ActivityDayRecords.class);
+                intent.putExtra("date", Waste.dayAdded);
                 startActivity(intent);
                 overridePendingTransition(R.anim.move_left, R.anim.move_left2);
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 
     @Override

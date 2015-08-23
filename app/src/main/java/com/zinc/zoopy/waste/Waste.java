@@ -1,6 +1,5 @@
 package com.zinc.zoopy.waste;
 import android.provider.BaseColumns;
-import android.util.Log;
 
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
@@ -10,7 +9,7 @@ import com.activeandroid.query.Select;
 import java.util.List;
 
 /**
- * Created by Administrator on 28-07-15.
+ * Created by Zoopy86 on 28-07-15.
  */
 @Table(name = "Waste", id = BaseColumns._ID)
 public class Waste extends Model {
@@ -48,17 +47,15 @@ public class Waste extends Model {
     }
 
     /*
-     * @param startDate Must be in YYYY-MM-DD format
-     * @param endDate Must be in YYYY-MM-DD format
+     * ALL DATES MUST BE IN YYYY-MM-DD FORMAT
      */
     public static List<Waste> getBetweenDate(String startDate, String endDate){
         return new Select()
                 .from(Waste.class)
-                .where("DayAdded BETWEEN ? AND ?", startDate, endDate)
+                .where("DayAdded BETWEEN strftime('%Y-%m-%d', ?) AND strftime('%Y-%m-%d', ?)", startDate, endDate)
                 .orderBy("DayAdded DESC")
                 .execute();
     }
-    //@param month must be in MM format
     public static List<Waste> groupByYearAndMonth(){
         return new Select()
                 .from(Waste.class)
@@ -90,6 +87,34 @@ public class Waste extends Model {
                 .orderBy("DayAdded DESC")
                 .execute();
     }
+    public static List<Waste> getWhere(String... categories){
+        String category = "";
+        for(String closure: categories){
+            if(closure.equals(categories[categories.length - 1])) {
+                category += "'" + closure + "'";
+            }
+            else category += "'" + closure + "'" + " OR Category LIKE ";
+        }
+        return new Select()
+                .from(Waste.class)
+                .where("Category LIKE " + category)
+                .orderBy("DayAdded DESC")
+                .execute();
+    }
+//    public static List<Waste> getWhere(String startDate, String endDate, String... categories){
+//        String category = "";
+//        for(String closure: categories){
+//            if(closure.equals(categories[categories.length - 1])) {
+//                category += "'" + closure + "'";
+//            }
+//            else category += "'" + closure + "'" + " OR Category LIKE ";
+//        }
+//        return new Select()
+//                .from(Waste.class)
+//                .where("DayAdded BETWEEN ? AND ? AND Category LIKE " + category, startDate, endDate)
+//                .orderBy("DayAdded DESC")
+//                .execute();
+//    }
     public static float getSum(List<Waste> wasteList){
         float sum = 0f;
         for (int i = 0; i < wasteList.size() ; i++) {
@@ -97,7 +122,7 @@ public class Waste extends Model {
         }
         return sum;
     }
-
+    //TODO: make delete by month and day functions
 
 }
 

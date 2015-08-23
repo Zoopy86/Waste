@@ -13,20 +13,22 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import com.daimajia.swipe.SwipeLayout;
+
 import java.util.List;
 
 import de.greenrobot.event.EventBus;
 
 
-public class Statistic extends AppCompatActivity {
+public class ActivitySortedEntries extends AppCompatActivity {
     ListView mListView;
     Spinner mSortSpinner;
-    WastesAdapter mWastesAdapter;
+    AdapterWastes mAdapterWastes;
     TextView mTotalSum;
     List<Waste> mWasteList;
     float wastesSum;
     String date;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,23 +39,26 @@ public class Statistic extends AppCompatActivity {
         mSortSpinner = (Spinner)findViewById(R.id.spinner_sort);
         mTotalSum = (TextView)findViewById(R.id.total_sum);
 
+
+
         inflateSpinner();
-        date = getIntent().getStringExtra("date");
-        mWasteList = Waste.getByDay(date);
+        if(Config.wastesToShow == null) {
+            mWasteList = Waste.getAll();
+        }
+        else mWasteList = Config.wastesToShow;
         Log.d("wListStatistic", "List SIZE" + mWasteList.size());
 
         //Log.d("WASTE", "" + mWasteList.get(0).dayAdded);
         Log.d("wListStatistic", "List SIZE" + mWasteList.size());
-        mWastesAdapter = new WastesAdapter(this, mWasteList);
-        mListView.setAdapter(mWastesAdapter);
-
+        mAdapterWastes = new AdapterWastes(this, mWasteList);
+        mListView.setAdapter(mAdapterWastes);
         getWastesSum();
 
         mSortSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                mWastesAdapter = new WastesAdapter(Statistic.this, mWasteList);
-                mListView.setAdapter(mWastesAdapter);
+                mAdapterWastes = new AdapterWastes(ActivitySortedEntries.this, mWasteList);
+                mListView.setAdapter(mAdapterWastes);
             }
 
             @Override
@@ -63,7 +68,7 @@ public class Statistic extends AppCompatActivity {
         });
     }
     void getWastesSum(){
-        wastesSum = Waste.getSum(Waste.getAll());
+        wastesSum = Waste.getSum(mWasteList);
         mTotalSum.setText("Wasted: " + wastesSum);
     }
 
@@ -73,8 +78,20 @@ public class Statistic extends AppCompatActivity {
         EventBus.getDefault().unregister(this);
     }
 
-    public void onEvent(EventBusDialogMessage event){
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
+    public void onEvent(EventDialog event){
         getWastesSum();
+    }
+
+    public void onEvent(EventRecord event){
+        Log.d("RECEvent", "Event fired");
+        mWasteList = event.records;
+        mAdapterWastes = new AdapterWastes(this, mWasteList);
+        mListView.setAdapter(mAdapterWastes);
     }
 
     void inflateSpinner(){
@@ -108,7 +125,7 @@ public class Statistic extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if(id == android.R.id.home){
-            Intent intent = new Intent(this, ActivityJournalMonth.class);
+            Intent intent = new Intent(this, ActivityJournalMonths.class);
             intent.putExtra("date", date);
             startActivity(intent);
             overridePendingTransition(R.anim.move_right2, R.anim.move_right);

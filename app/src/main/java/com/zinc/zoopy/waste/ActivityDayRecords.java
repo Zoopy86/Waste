@@ -1,10 +1,8 @@
 package com.zinc.zoopy.waste;
 
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,10 +16,10 @@ import java.util.List;
 
 import de.greenrobot.event.EventBus;
 
-public class ActivityDayEntries extends AppCompatActivity {
+public class ActivityDayRecords extends AppCompatActivity {
     ListView mListView;
     Spinner mSortSpinner;
-    WastesAdapter mWastesAdapter;
+    AdapterWastes mAdapterWastes;
     TextView mTotalSum;
     List<Waste> mWasteList;
     float wastesSum;
@@ -39,16 +37,16 @@ public class ActivityDayEntries extends AppCompatActivity {
         inflateSpinner();
         date = getIntent().getStringExtra("date");
         mWasteList = Waste.getByDay(date);
-        mWastesAdapter = new WastesAdapter(this, mWasteList);
-        mListView.setAdapter(mWastesAdapter);
+        mAdapterWastes = new AdapterWastes(this, mWasteList);
+        mListView.setAdapter(mAdapterWastes);
         setTitle(Config.dayFormat(date));
         getWastesSum();
 
         mSortSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                mWastesAdapter = new WastesAdapter(ActivityDayEntries.this, mWasteList);
-                mListView.setAdapter(mWastesAdapter);
+                mAdapterWastes = new AdapterWastes(ActivityDayRecords.this, mWasteList);
+                mListView.setAdapter(mAdapterWastes);
             }
 
             @Override
@@ -59,7 +57,7 @@ public class ActivityDayEntries extends AppCompatActivity {
     }
     void getWastesSum(){
         wastesSum = Waste.getSum(Waste.getAll());
-        mTotalSum.setText("Wasted: " + wastesSum);
+        mTotalSum.setText(getString(R.string.total_wasted) + wastesSum);
     }
 
     @Override
@@ -68,7 +66,7 @@ public class ActivityDayEntries extends AppCompatActivity {
         EventBus.getDefault().unregister(this);
     }
 
-    public void onEvent(EventBusDialogMessage event){
+    public void onEvent(EventDialog event){
         getWastesSum();
     }
 

@@ -11,20 +11,20 @@ import android.widget.ListView;
 
 public class ActivityJournal extends AppCompatActivity {
     ListView mListView;
-    AdapterJournalDate mAdapterJournalDate;
+    AdapterJournalMonths mAdapterJournalMonths;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_journal);
         mListView = (ListView)findViewById(R.id.journal_list_dates);
-        mAdapterJournalDate = new AdapterJournalDate(this, Waste.groupByYearAndMonth());
-        mListView.setAdapter(mAdapterJournalDate);
+        mAdapterJournalMonths = new AdapterJournalMonths(this, Waste.groupByYearAndMonth());
+        mListView.setAdapter(mAdapterJournalMonths);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long arg) {
-                Waste waste = (Waste)mListView.getItemAtPosition(position);
-                Intent intent = new Intent(ActivityJournal.this, ActivityJournalMonth.class);
-                intent.putExtra("date", waste.dayAdded);
+                Waste Waste = (Waste)mListView.getItemAtPosition(position);
+                Intent intent = new Intent(ActivityJournal.this, ActivityJournalMonths.class);
+                intent.putExtra("date", Waste.dayAdded);
                 startActivity(intent);
                 overridePendingTransition(R.anim.move_left, R.anim.move_left2);
             }
@@ -35,6 +35,7 @@ public class ActivityJournal extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_journal, menu);
+        menu.getItem(2).setVisible(false);
         return true;
     }
 
@@ -49,6 +50,7 @@ public class ActivityJournal extends AppCompatActivity {
         if (id == R.id.action_settings) {
             return true;
         }
+
         if(id == R.id.action_new_waste){
             Intent intent = new Intent(this, ActivityMain.class);
             startActivity(intent);

@@ -7,18 +7,15 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 /**
- * Created by Administrator on 12-08-15.
+ * Created by Zoopy86 on 12-08-15.
  */
-public class AdapterJournalDay extends ArrayAdapter {
+public class AdapterJournalMonths extends ArrayAdapter {
     private final Context mContext;
     private List<Waste> mWasteDates;
-    public AdapterJournalDay(Context context, List<Waste> objects) {
+    public AdapterJournalMonths(Context context, List<Waste> objects) {
         super(context,R.layout.item_journal_month, objects);
         this.mContext = context;
         this.mWasteDates = objects;
@@ -40,9 +37,8 @@ public class AdapterJournalDay extends ArrayAdapter {
             holder = (ViewHolder)convertView.getTag();
         }
 
-        holder.tvDate.setText("" + Config.dayFormat(wasteDate.dayAdded));
-        //TODO: add string resource
-        holder.tvEntries.setText("Entries: " + Waste.getByDay(wasteDate.dayAdded).size() + " Sum: " + Waste.getSum(Waste.getByDay(wasteDate.dayAdded)));
+        holder.tvDate.setText("" + Config.monthFormat(wasteDate.dayAdded));
+        holder.tvEntries.setText(mContext.getString(R.string.entries) + ": " + Waste.getByYearAndMonth(wasteDate.dayAdded).size() + " " + mContext.getString(R.string.sum) + ": " + Waste.getSum(Waste.getByYearAndMonth(wasteDate.dayAdded)));
         return convertView;
     }
 

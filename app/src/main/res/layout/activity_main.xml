@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:gravity="center"
-        android:text="@string/spent"
+        android:text="@string/amount"
         android:textColor="#ff006aaa"
         android:textSize="@dimen/abc_text_size_large_material"
         />
@@ -92,7 +92,7 @@
         android:layout_below="@+id/separator2"
         android:layout_marginTop="15dp"
         android:gravity="center"
-        android:text="@string/reason_text"
+        android:text="@string/comment"
         android:textAlignment="center"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="#ff006aaa"
