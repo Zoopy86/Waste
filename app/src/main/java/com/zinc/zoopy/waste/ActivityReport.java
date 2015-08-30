@@ -89,6 +89,7 @@ public class ActivityReport extends AppCompatActivity {
                 Intent intent = new Intent(ActivityReport.this, ActivityPickCategories.class);
                 intent.putExtra("selectedCategories", mCategories);
                 startActivityForResult(intent, 2);
+                overridePendingTransition(R.anim.move_left, R.anim.move_left2);
             }
         });
         resultLayout.setOnClickListener(new View.OnClickListener() {
@@ -97,48 +98,45 @@ public class ActivityReport extends AppCompatActivity {
                 Intent intent = new Intent(ActivityReport.this, ActivitySortedEntries.class);
                 Config.wastesToShow = resultRecs;
                 startActivity(intent);
+                overridePendingTransition(R.anim.move_left, R.anim.move_left2);
             }
         });
     }
 
     private List<Waste> getRecordsByPeriod(String period) {
-        Calendar c = Calendar.getInstance(Locale.UK);
+        Calendar c = Calendar.getInstance();
         String today = Config.dateStringBuilder(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).toString();
-        //TODO: create constants for string values
-        switch (period) {
-            case "All time":
-                return Waste.getAll();
-            case "Today":
-                return Waste.getBetweenDate(today, today);
-            case "This week":
-                c.set(Calendar.DAY_OF_WEEK, c.getFirstDayOfWeek());
-                String week = Config.dateStringBuilder(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).toString();
-                return Waste.getBetweenDate(week, today);
-            case "This month":
-                c.set(Calendar.DAY_OF_MONTH, 1);
-                String thisMonth = Config.dateStringBuilder(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).toString();
-                return Waste.getBetweenDate(thisMonth, today);
-            case "Last month":
-                c.set(Calendar.DAY_OF_MONTH, 1);
-                c.add(Calendar.MONTH, -1);
-                String lastMonthFirstDay = Config.dateStringBuilder(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).toString();
-                c.set(Calendar.DAY_OF_MONTH, c.getActualMaximum(Calendar.DAY_OF_MONTH));
-                String lastMonthLastDay = Config.dateStringBuilder(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).toString();
-                return Waste.getBetweenDate(lastMonthFirstDay, lastMonthLastDay);
-            case "This year":
-                c.set(Calendar.DAY_OF_YEAR, 1);
-                String thisYear = Config.dateStringBuilder(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).toString();
-                return Waste.getBetweenDate(thisYear, today);
-            case "Last year":
-                c.set(Calendar.DAY_OF_YEAR, 1);
-                c.add(Calendar.YEAR, -1);
-                String lastYearFirstDay = Config.dateStringBuilder(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).toString();
-                c.set(Calendar.DAY_OF_YEAR, c.getActualMaximum(Calendar.DAY_OF_YEAR));
-                String lastYearLastDay = Config.dateStringBuilder(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).toString();
-                return Waste.getBetweenDate(lastYearFirstDay, lastYearLastDay);
-            default:
-                return Waste.getAll();
-        }
+        if (period.equals(getString(R.string.period_all))) {
+            return Waste.getAll();
+        } else if (period.equals(getString(R.string.period_today))) {
+            return Waste.getBetweenDate(today, today);
+        } else if (period.equals(getString(R.string.period_this_week))) {
+            c.set(Calendar.DAY_OF_WEEK, c.getFirstDayOfWeek());
+            String week = Config.dateStringBuilder(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).toString();
+            return Waste.getBetweenDate(week, today);
+        } else if (period.equals(getString(R.string.period_this_month))) {
+            c.set(Calendar.DAY_OF_MONTH, 1);
+            String thisMonth = Config.dateStringBuilder(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).toString();
+            return Waste.getBetweenDate(thisMonth, today);
+        } else if (period.equals(getString(R.string.period_last_month))) {
+            c.set(Calendar.DAY_OF_MONTH, 1);
+            c.add(Calendar.MONTH, -1);
+            String lastMonthFirstDay = Config.dateStringBuilder(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).toString();
+            c.set(Calendar.DAY_OF_MONTH, c.getActualMaximum(Calendar.DAY_OF_MONTH));
+            String lastMonthLastDay = Config.dateStringBuilder(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).toString();
+            return Waste.getBetweenDate(lastMonthFirstDay, lastMonthLastDay);
+        } else if (period.equals(getString(R.string.period_this_year))) {
+            c.set(Calendar.DAY_OF_YEAR, 1);
+            String thisYear = Config.dateStringBuilder(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).toString();
+            return Waste.getBetweenDate(thisYear, today);
+        } else if (period.equals(getString(R.string.period_last_year))) {
+            c.set(Calendar.DAY_OF_YEAR, 1);
+            c.add(Calendar.YEAR, -1);
+            String lastYearFirstDay = Config.dateStringBuilder(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).toString();
+            c.set(Calendar.DAY_OF_YEAR, c.getActualMaximum(Calendar.DAY_OF_YEAR));
+            String lastYearLastDay = Config.dateStringBuilder(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).toString();
+            return Waste.getBetweenDate(lastYearFirstDay, lastYearLastDay);
+        } else return Waste.getAll();
     }
 
     private List<Waste> getRecordsByCategory(String... cats) {
@@ -210,12 +208,18 @@ public class ActivityReport extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.action_new_waste) {
+            Intent intent = new Intent(this, ActivityMain.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.move_right2, R.anim.move_right);
+            finish();
         }
-
+        if (id == R.id.journal) {
+            Intent intent = new Intent(getApplicationContext(), ActivityJournal.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.move_left, R.anim.move_left2);
+            finish();
+        }
         return super.onOptionsItemSelected(item);
     }
 }

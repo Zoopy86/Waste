@@ -53,10 +53,6 @@ public class ActivityAddCategory extends AppCompatActivity {
             finish();
             overridePendingTransition(R.anim.move_right2, R.anim.move_right);
         }
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
         if(id == R.id.action_new_waste){
             Intent intent = new Intent(this, ActivityMain.class);
             startActivity(intent);

@@ -26,7 +26,7 @@
         android:layout_marginTop="15dp"
         android:background="@drawable/custom_edit_text"
         android:gravity="center"
-        android:hint="Click to input amount"
+        android:hint="@string/hint_amount"
         android:inputType="numberSigned|numberDecimal"
         android:padding="5dp"
         android:textColor="#00a911"
@@ -105,7 +105,7 @@
         android:layout_alignParentEnd="false"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/ewa_tv_label2"
-        android:hint="Supermarket"/>
+        android:hint="@string/hint_comment"/>
 
 
     <TextView
@@ -159,6 +159,7 @@
         android:horizontalSpacing="5dp"
         android:numColumns="4"
         android:stretchMode="columnWidth"
-        android:verticalSpacing="5dp"/>
+        android:verticalSpacing="5dp"
+        android:visibility="gone"/>
 
 </RelativeLayout>

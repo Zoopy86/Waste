@@ -2,8 +2,16 @@
       xmlns:app="http://schemas.android.com/apk/res-auto"
       xmlns:tools="http://schemas.android.com/tools"
       tools:context="com.zinc.zoopy.waste.ActivityReport">
-    <item android:id="@+id/action_settings"
-          android:title="@string/action_settings"
-          android:orderInCategory="100"
-          app:showAsAction="never"/>
+    <item
+        android:id="@+id/action_new_waste"
+        android:icon="@drawable/ic_add_circle_white_48dp"
+        android:orderInCategory="0"
+        android:title="@string/all"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/journal"
+        android:icon="@drawable/ic_chrome_reader_mode_white_48dp"
+        android:orderInCategory="50"
+        android:title="@string/journal_menu_title"
+        app:showAsAction="always"/>
 </menu>

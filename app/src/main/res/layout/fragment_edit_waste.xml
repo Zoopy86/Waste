@@ -26,7 +26,7 @@
         android:layout_marginTop="15dp"
         android:background="@drawable/custom_edit_text"
         android:gravity="center"
-        android:hint="Click to input amount"
+        android:hint="@string/hint_amount"
         android:inputType="numberSigned|numberDecimal"
         android:padding="5dp"
         android:textColor="#00a911"
@@ -105,7 +105,7 @@
         android:layout_alignParentEnd="false"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/ewa_tv_label2"
-        android:hint="Supermarket"/>
+        android:hint="@string/hint_comment"/>
 
 
     <TextView
@@ -118,7 +118,7 @@
         android:layout_marginTop="10dp"
         android:background="#8c00ff30"
         android:gravity="center_horizontal"
-        android:text="Date"
+        android:text="@string/date"
         android:textAlignment="center"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textSize="22sp"/>
@@ -132,7 +132,7 @@
         android:layout_marginTop="10dp"
         android:background="#8c00ff30"
         android:gravity="center"
-        android:text="Time"
+        android:text="@string/time"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textSize="18sp"/>
 

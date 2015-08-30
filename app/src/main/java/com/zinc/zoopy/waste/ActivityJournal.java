@@ -35,7 +35,6 @@ public class ActivityJournal extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_journal, menu);
-        menu.getItem(2).setVisible(false);
         return true;
     }
 
@@ -46,14 +45,17 @@ public class ActivityJournal extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
         if(id == R.id.action_new_waste){
             Intent intent = new Intent(this, ActivityMain.class);
             startActivity(intent);
+            overridePendingTransition(R.anim.move_right2, R.anim.move_right);
+            finish();
+        }
+        if (id == R.id.report) {
+            Intent intent = new Intent(getApplicationContext(), ActivityReport.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.move_left, R.anim.move_left2);
+            finish();
         }
 
         return super.onOptionsItemSelected(item);

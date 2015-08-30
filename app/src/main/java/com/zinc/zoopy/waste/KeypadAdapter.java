@@ -40,7 +40,7 @@ public class KeypadAdapter extends BaseAdapter {
         Button btn;
         if (convertView == null) { // if it's not recycled, initialize some attributes
             btn = new Button(mContext);
-            if(mButtons[position].getText().equals("Close"))btn.setTextColor(Color.rgb(195, 50,0));
+            if(mButtons[position].getText().equals("Close"))btn.setBackgroundColor(Color.rgb(195, 50,0));
             else btn.setTextColor(Color.WHITE);
 
             KeypadButton keypadButton = mButtons[position];

@@ -20,7 +20,7 @@ public enum KeypadButton{
     CALCULATE("=", KeypadButtonCategory.OPERATOR),
     C("C", KeypadButtonCategory.CLEAR),
     CE("CE", KeypadButtonCategory.CLEAR),
-    CLOSE("Close", KeypadButtonCategory.OTHER),
+    CLOSE("▼", KeypadButtonCategory.OTHER),
     DOT(".", KeypadButtonCategory.NUMBER),
     NONE("",KeypadButtonCategory.OTHER);
 

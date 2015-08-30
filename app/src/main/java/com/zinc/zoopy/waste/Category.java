@@ -7,6 +7,7 @@ import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Select;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Table(name = "Categories", id = BaseColumns._ID)
@@ -30,5 +31,12 @@ public class Category extends Model {
             cats[i] = getAll().get(i).name;
         }
         return cats;
+    }
+    public static List<String> getAllNames(){
+        List<String> names = new ArrayList<>();
+        for(Category c: getAll()){
+            names.add(c.name);
+        }
+        return names;
     }
 }

@@ -1,6 +1,7 @@
 package com.zinc.zoopy.waste;
 
 import android.content.Intent;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -87,9 +88,13 @@ public class ActivityPickCategories extends AppCompatActivity {
                 setResult(RESULT_OK, intent);
                 // start the ResultActivity
                 finish();
+                overridePendingTransition(R.anim.move_right2, R.anim.move_right);
             }
         }
-
+        if(id == android.R.id.home){
+            NavUtils.navigateUpFromSameTask(this);
+            overridePendingTransition(R.anim.move_right2, R.anim.move_right);
+        }
         return super.onOptionsItemSelected(item);
     }
 }

@@ -2,18 +2,4 @@
       xmlns:app="http://schemas.android.com/apk/res-auto"
       xmlns:tools="http://schemas.android.com/tools"
       tools:context="com.zinc.zoopy.Waste.ActivityAddCategory">
-    <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="never"/>
-    <item
-        android:id="@+id/action_new_waste"
-        android:icon="@drawable/ic_add_circle_white_48dp"
-        android:orderInCategory="100"
-        android:title="Add"
-        app:showAsAction="always"/>
-    <item
-        android:id="@+id/report"
-        android:title="@string/title_menu_report"/>
 </menu>

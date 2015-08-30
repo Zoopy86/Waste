@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/b_add_new_category"
-        android:text="Add New Category"/>
+        android:text="@string/b_add_new_category"/>
     <ListView
     android:layout_width="match_parent"
     android:layout_height="wrap_content"

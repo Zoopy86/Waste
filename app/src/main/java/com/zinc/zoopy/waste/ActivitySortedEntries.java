@@ -33,7 +33,6 @@ public class ActivitySortedEntries extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_statistic);
-
         EventBus.getDefault().register(this);
         mListView = (ListView)findViewById(R.id.statistic_listview);
         mSortSpinner = (Spinner)findViewById(R.id.spinner_sort);
@@ -124,15 +123,12 @@ public class ActivitySortedEntries extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+
         if(id == android.R.id.home){
             Intent intent = new Intent(this, ActivityJournalMonths.class);
             intent.putExtra("date", date);
             startActivity(intent);
             overridePendingTransition(R.anim.move_right2, R.anim.move_right);
-        }
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
         }
         if(id == R.id.action_new_waste){
             Intent intent = new Intent(this, ActivityMain.class);

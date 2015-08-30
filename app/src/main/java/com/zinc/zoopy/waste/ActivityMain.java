@@ -64,7 +64,8 @@ public class ActivityMain extends AppCompatActivity {
                 overridePendingTransition(R.anim.move_left, R.anim.move_left2);
             }
         });
-        Log.d(TAG, "Sorted Waste size: " + Waste.getWhere("Products", "Tickets").size());
+        mKeypadGrid.startAnimation(getToggleKeypad());
+        keypadIsOpen = true;
     }
 
     @Override
@@ -90,7 +91,7 @@ public class ActivityMain extends AppCompatActivity {
 
     void initInstances() {
         EventBus.getDefault().register(this);
-        keypadIsOpen = true;
+        keypadIsOpen = false;
         mNumberInput = (EditText) findViewById(R.id.ewa_et_amount);
         mNumberInput.setInputType(InputType.TYPE_NULL);
         mKeypadGrid = (GridView) findViewById(R.id.grid_calc);
@@ -109,7 +110,7 @@ public class ActivityMain extends AppCompatActivity {
 
         String category = getIntent().getStringExtra("category_name");
         if (category == null || category.matches("")) {
-            category = "No category";
+            category = getString(R.string.no_category);
         }
         mPickCategoryButton.setText(category);
 
@@ -145,7 +146,6 @@ public class ActivityMain extends AppCompatActivity {
                 if (!keypadIsOpen) {
                     mKeypadGrid.startAnimation(getToggleKeypad());
                     keypadIsOpen = true;
-                    Log.d(TAG, "Bottom" + mKeypadGrid.getBottom());
                 }
             }
         });
@@ -205,6 +205,11 @@ public class ActivityMain extends AppCompatActivity {
                 showToast(getString(R.string.error_empty_amount));
             } else {
                 Waste.category = mPickCategoryButton.getText().toString();
+                if(!Category.getAllNames().contains(Waste.category)){
+                    Category cat = new Category();
+                    cat.name = Waste.category;
+                    cat.save();
+                }
                 Waste.unixTime = System.currentTimeMillis();
                 Waste.dayAdded = mDateToSave;
                 Waste.timeAdded = mTimeTextView.getText().toString();
@@ -241,18 +246,17 @@ public class ActivityMain extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
         if (id == R.id.report) {
             Intent intent = new Intent(getApplicationContext(), ActivityReport.class);
             startActivity(intent);
+            overridePendingTransition(R.anim.move_left, R.anim.move_left2);
+            finish();
         }
         if(id == R.id.journal){
             Intent intent = new Intent(getApplicationContext(), ActivityJournal.class);
             startActivity(intent);
+            overridePendingTransition(R.anim.move_left, R.anim.move_left2);
+            finish();
         }
 
         return super.onOptionsItemSelected(item);

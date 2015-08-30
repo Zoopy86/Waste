@@ -54,7 +54,7 @@
             android:layout_marginLeft="5dp"
             android:layout_marginStart="5dp"
             android:background="@color/material_blue_grey_950"
-            android:src="@drawable/ic_action_edit"
+            android:src="@drawable/ic_attach_money_white_48dp"
             >
         </ImageView>
 
