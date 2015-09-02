@@ -47,6 +47,7 @@
     <string name="b_add_new_category">Добавить новую категорию</string>
     <string name="b_add">Добавить</string>
     <string name="hint_enter_new_category">Введите новую категорию</string>
-    <string name="hint_comment">Супермаркет</string>
+    <string name="hint_comment">Добавить комментарий &#8230;</string>
     <string name="no_category">Без категории</string>
+    <string name="title_menu_new_entry">Записать</string>
 </resources>

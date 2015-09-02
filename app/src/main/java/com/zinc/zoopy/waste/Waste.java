@@ -1,4 +1,6 @@
 package com.zinc.zoopy.waste;
+import android.content.Context;
+import android.content.res.Resources;
 import android.provider.BaseColumns;
 
 import com.activeandroid.Model;
@@ -6,6 +8,7 @@ import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Select;
 
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -121,6 +124,58 @@ public class Waste extends Model {
             sum += wasteList.get(i).amount;
         }
         return sum;
+    }
+
+    public static List<Waste> getRecordsByPeriod(String period) {
+        Calendar c = Calendar.getInstance();
+        String today = Config.dateStringBuilder(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).toString();
+
+        if (period.equals(Config.context.getString(R.string.period_all))) {
+            return Waste.getAll();
+        } else if (period.equals(Config.context.getString(R.string.period_today))) {
+            return Waste.getBetweenDate(today, today);
+        } else if (period.equals(Config.context.getString(R.string.period_this_week))) {
+            c.set(Calendar.DAY_OF_WEEK, c.getFirstDayOfWeek());
+            String week = Config.dateStringBuilder(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).toString();
+            return Waste.getBetweenDate(week, today);
+        } else if (period.equals(Config.context.getString(R.string.period_this_month))) {
+            c.set(Calendar.DAY_OF_MONTH, 1);
+            String thisMonth = Config.dateStringBuilder(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).toString();
+            return Waste.getBetweenDate(thisMonth, today);
+        } else if (period.equals(Config.context.getString(R.string.period_last_month))) {
+            c.set(Calendar.DAY_OF_MONTH, 1);
+            c.add(Calendar.MONTH, -1);
+            String lastMonthFirstDay = Config.dateStringBuilder(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).toString();
+            c.set(Calendar.DAY_OF_MONTH, c.getActualMaximum(Calendar.DAY_OF_MONTH));
+            String lastMonthLastDay = Config.dateStringBuilder(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).toString();
+            return Waste.getBetweenDate(lastMonthFirstDay, lastMonthLastDay);
+        } else if (period.equals(Config.context.getString(R.string.period_this_year))) {
+            c.set(Calendar.DAY_OF_YEAR, 1);
+            String thisYear = Config.dateStringBuilder(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).toString();
+            return Waste.getBetweenDate(thisYear, today);
+        } else if (period.equals(Config.context.getString(R.string.period_last_year))) {
+            c.set(Calendar.DAY_OF_YEAR, 1);
+            c.add(Calendar.YEAR, -1);
+            String lastYearFirstDay = Config.dateStringBuilder(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).toString();
+            c.set(Calendar.DAY_OF_YEAR, c.getActualMaximum(Calendar.DAY_OF_YEAR));
+            String lastYearLastDay = Config.dateStringBuilder(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).toString();
+            return Waste.getBetweenDate(lastYearFirstDay, lastYearLastDay);
+        } else return Waste.getAll();
+    }
+
+    public static List<Waste> getRecordsByCategory(String... cats) {
+        return Waste.getWhere(cats);
+    }
+
+    public static List<Waste> getRetainedRecords(List<Waste> list1, List<Waste> list2) {
+        if (list1.size() < list2.size()) {
+            list2.retainAll(list1);
+            return list2;
+        } else {
+            list1.retainAll(list2);
+            return list1;
+        }
+
     }
     //TODO: make delete by month and day functions
 

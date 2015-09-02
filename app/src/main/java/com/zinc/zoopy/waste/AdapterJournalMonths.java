@@ -40,8 +40,8 @@ public class AdapterJournalMonths extends ArrayAdapter {
         holder.tvDate.setText("" + Config.monthFormat(wasteDate.dayAdded));
         holder.tvEntries.setText(mContext.getString(R.string.entries) + ": " + Waste.getByYearAndMonth(wasteDate.dayAdded).size() + " " + mContext.getString(R.string.sum) + ": " + Waste.getSum(Waste.getByYearAndMonth(wasteDate.dayAdded)));
         return convertView;
-    }
 
+    }
     static class ViewHolder {
         TextView tvDate;
         TextView tvEntries;

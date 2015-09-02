@@ -2,11 +2,13 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
+              android:background="@color/my_background"
               tools:context="com.zinc.zoopy.Waste.ActivityJournal">
 
     <ListView
         android:id="@+id/journal_list_dates"
         android:layout_width="match_parent"
+        android:background="@color/my_white"
         android:layout_height="wrap_content"/>
 
 </LinearLayout>

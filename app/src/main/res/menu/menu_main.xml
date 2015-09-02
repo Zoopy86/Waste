@@ -2,16 +2,16 @@
       xmlns:app="http://schemas.android.com/apk/res-auto"
       xmlns:tools="http://schemas.android.com/tools"
       tools:context=".MainActivity">
-    <item
-        android:id="@+id/journal"
-        android:icon="@drawable/ic_chrome_reader_mode_white_48dp"
-        android:orderInCategory="0"
-        android:title="@string/journal_menu_title"
-        app:showAsAction="always"/>
-    <item
-        android:id="@+id/report"
-        android:icon="@drawable/ic_account_balance_white_48dp"
-        android:orderInCategory="50"
-        android:title="@string/title_menu_report"
-        app:showAsAction="always"/>
+    <!--<item-->
+        <!--android:id="@+id/journal"-->
+        <!--android:icon="@drawable/ic_chrome_reader_mode_white_48dp"-->
+        <!--android:orderInCategory="0"-->
+        <!--android:title="@string/journal_menu_title"-->
+        <!--app:showAsAction="always"/>-->
+    <!--<item-->
+        <!--android:id="@+id/report"-->
+        <!--android:icon="@drawable/ic_account_balance_white_48dp"-->
+        <!--android:orderInCategory="50"-->
+        <!--android:title="@string/title_menu_report"-->
+        <!--app:showAsAction="always"/>-->
 </menu>

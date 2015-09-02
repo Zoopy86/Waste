@@ -1,10 +1,13 @@
 package com.zinc.zoopy.waste;
 
+import android.animation.AnimatorInflater;
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.util.Log;
@@ -18,7 +21,10 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.util.Iterator;
 import java.util.Stack;
@@ -60,7 +66,7 @@ public class ActivityEditWaste extends AppCompatActivity {
             startActivity(intent);
         }
         if(id == android.R.id.home){
-            finish();
+            NavUtils.navigateUpFromSameTask(this);
             overridePendingTransition(R.anim.move_right2, R.anim.move_right);
         }
         return super.onOptionsItemSelected(item);
@@ -80,8 +86,6 @@ public class ActivityEditWaste extends AppCompatActivity {
         Button mCategoryButton;
         DateDialog mDateDialog = new DateDialog();
         TimeDialog mTimeDialog = new TimeDialog();
-
-        Animation toggleKeypad;
         TextView mStackText;
         Stack<String> mInputStack = new Stack<>();
         Stack<String> mOperationStack = new Stack<>();
@@ -89,7 +93,9 @@ public class ActivityEditWaste extends AppCompatActivity {
         boolean hasFinalResult = false;
         GridView mKeypadGrid;
         KeypadAdapter mKeypadAdapter;
-        boolean keypadIsOpen;
+        SlidingUpPanelLayout mSlidingUpPanelLayout;
+        ImageView mSlideArrows;
+        View rootView;
         public PlaceholderFragment() {
         }
 
@@ -97,10 +103,9 @@ public class ActivityEditWaste extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             EventBus.getDefault().register(this);
-            final View rootView = inflater.inflate(R.layout.fragment_edit_waste, container, false);
+            rootView = inflater.inflate(R.layout.fragment_edit_waste, container, false);
             amount = (EditText) rootView.findViewById(R.id.ewa_et_amount);
             amount.setInputType(InputType.TYPE_NULL);
-            keypadIsOpen = true;
             userNote = (EditText) rootView.findViewById(R.id.ewa_et_usernote);
             mSaveButton = (Button) rootView.findViewById(R.id.ewa_b_save);
             mContext = rootView.getContext();
@@ -109,6 +114,10 @@ public class ActivityEditWaste extends AppCompatActivity {
             mCategoryButton = (Button)rootView.findViewById(R.id.b_pick_category);
             mKeypadGrid = (GridView) rootView.findViewById(R.id.grid_calc);
             mStackText = (TextView) rootView.findViewById(R.id.tv_stack);
+
+            mSlideArrows = (ImageView) rootView.findViewById(R.id.img_slide_arrows);
+            mSlidingUpPanelLayout = (SlidingUpPanelLayout) rootView.findViewById(R.id.sliding_layout);
+            mSlidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
             mKeypadAdapter = new KeypadAdapter(mContext);
 
             mCategoryButton.setText(mWaste.category);
@@ -171,14 +180,52 @@ public class ActivityEditWaste extends AppCompatActivity {
             amount.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (!keypadIsOpen) {
-                        mKeypadGrid.startAnimation(getToggleKeypad());
-                        keypadIsOpen = true;
-                    }
+                    mSlidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
                 }
             });
 
+
+            rotateArrowsUp();
+            mSlidingUpPanelLayout.setPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
+
+                @Override
+                public void onPanelSlide(View view, float v) {
+
+                }
+
+                @Override
+                public void onPanelCollapsed(View view) {
+                    rotateArrowsUp();
+                }
+
+                @Override
+                public void onPanelExpanded(View view) {
+                    rotateArrowsDown();
+                }
+
+                @Override
+                public void onPanelAnchored(View view) {
+
+                }
+
+                @Override
+                public void onPanelHidden(View view) {
+
+                }
+            });
             return rootView;
+        }
+        public void rotateArrowsUp(){
+            ObjectAnimator anim = (ObjectAnimator) AnimatorInflater.loadAnimator(mContext, R.animator.turn_up);
+            anim.setTarget(mSlideArrows);
+            anim.setDuration(500);
+            anim.start();
+        }
+        public void rotateArrowsDown(){
+            ObjectAnimator anim = (ObjectAnimator) AnimatorInflater.loadAnimator(mContext, R.animator.turn_down);
+            anim.setTarget(mSlideArrows);
+            anim.setDuration(500);
+            anim.start();
         }
 
         private void updateTimeView() {
@@ -217,32 +264,6 @@ public class ActivityEditWaste extends AppCompatActivity {
             EventBus.getDefault().unregister(this);
         }
         //region CALCULATOR FUNCTIONS
-        private Animation getToggleKeypad() {
-            if (keypadIsOpen) {
-                toggleKeypad = AnimationUtils.loadAnimation(mContext, R.anim.close_keypad);
-            } else if (!keypadIsOpen) {
-                toggleKeypad = AnimationUtils.loadAnimation(mContext, R.anim.open_keypad);
-            }
-            toggleKeypad.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {
-                    mKeypadGrid.setVisibility(View.VISIBLE);
-                }
-
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    if (!keypadIsOpen) {
-                        mKeypadGrid.setVisibility(View.GONE);
-                    }
-                }
-
-                @Override
-                public void onAnimationRepeat(Animation animation) {
-
-                }
-            });
-            return toggleKeypad;
-        }
 
         //CALC Functions
         public void processKeypadInput(KeypadButton keypadButton) {
@@ -253,10 +274,6 @@ public class ActivityEditWaste extends AppCompatActivity {
             double userInputValue = Double.NaN;
             switch (keypadButton) {
                 case CLOSE:
-                    if (keypadIsOpen) {
-                        mKeypadGrid.startAnimation(getToggleKeypad());
-                        keypadIsOpen = false;
-                    }
                     break;
                 case DOT:
                     if (currentInput.contains(".") || hasFinalResult) {

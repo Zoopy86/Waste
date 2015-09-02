@@ -4,8 +4,10 @@ import android.content.Context;
 import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.GridLayout;
 
 /**
  * Created by Zoopy86 on 04-08-15.
@@ -40,13 +42,16 @@ public class KeypadAdapter extends BaseAdapter {
         Button btn;
         if (convertView == null) { // if it's not recycled, initialize some attributes
             btn = new Button(mContext);
-            if(mButtons[position].getText().equals("Close"))btn.setBackgroundColor(Color.rgb(195, 50,0));
-            else btn.setTextColor(Color.WHITE);
-
+            btn.setTextColor(Color.WHITE);
+            AbsListView.LayoutParams params = new AbsListView.LayoutParams(100, 70);
+            btn.setLayoutParams(params);
+            btn.setTextSize(16);
+            btn.setPadding(0,0,0,0);
             KeypadButton keypadButton = mButtons[position];
             if (keypadButton != KeypadButton.NONE) {
                 btn.setOnClickListener(mOnButtonClick);
             }
+
             btn.setBackgroundResource(R.drawable.keypad_states);
             // Set CalculatorButton enumeration as tag of the button so that we
             // will use this information from our main view to identify what to do
@@ -60,10 +65,10 @@ public class KeypadAdapter extends BaseAdapter {
     }
 
     private KeypadButton[] mButtons = {
-            KeypadButton.CLOSE,
+            KeypadButton.BACKSPACE,
             KeypadButton.C,
             KeypadButton.SIGN,
-            KeypadButton.BACKSPACE,
+            KeypadButton.CLOSE,
             KeypadButton.SEVEN,
             KeypadButton.EIGHT,
             KeypadButton.NINE,

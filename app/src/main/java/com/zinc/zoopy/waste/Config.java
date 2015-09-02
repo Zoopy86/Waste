@@ -9,6 +9,7 @@ import com.activeandroid.ActiveAndroid;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -22,10 +23,11 @@ public class Config extends Application {
     public static String[] selectedCategories;
     public static List<Waste> wastesToShow;
     public static Context context;
+    public static int tabPosition;
     @Override
     public void onCreate() {
         super.onCreate();
-        context = getApplicationContext();
+        context = this;
         ActiveAndroid.initialize(this, true);
         mDefaultCategories = getResources().getStringArray(R.array.default_categories_array);
         if(Category.getAll().isEmpty()){
@@ -61,8 +63,11 @@ public class Config extends Application {
     }
     //May 2015
     public static String monthFormat(String dayAdded){
+        String d;
+        String[] ruMonths = {"января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"};
+
         SimpleDateFormat simpleDateFormatIn = new SimpleDateFormat("yyyy-MM-dd");
-        SimpleDateFormat simpleDateFormatOut = new SimpleDateFormat("MMMM yy");
+        SimpleDateFormat simpleDateFormatOut = new SimpleDateFormat("MMMM yyyy");
         Date date;
         try {
             date = simpleDateFormatIn.parse(dayAdded);
@@ -70,7 +75,16 @@ public class Config extends Application {
             date = new Date();
             e.printStackTrace();
         }
-        return simpleDateFormatOut.format(date);
+        d = simpleDateFormatOut.format(date);
+        Log.d("DATE", d);
+        for(String month: ruMonths){
+            if(d.contains(month)){
+                Log.d("DATE", month);
+                d = d.replace(month, rusMonth(month));
+                Log.d("DATE", d);
+            }
+        }
+        return d;
     }
     public static StringBuilder dateStringBuilder(int d, int m, int y) {
         m = m + 1;
@@ -80,7 +94,25 @@ public class Config extends Application {
         if(y<10){mY = "0" + y;}else mY = "" + y;
         return new StringBuilder().append(mD).append("-").append(mM).append("-").append(mY);
     }
-
+    static String rusMonth(String month){
+        String m;
+        switch (month){
+            case "января":  m = "Январь";  break;
+            case "февраля": m = "Февраль"; break;
+            case "марта":   m = "Март";    break;
+            case "апреля":  m = "Апрель";  break;
+            case "мая":     m = "Май";     break;
+            case "июня":    m = "Июнь";    break;
+            case "июля":    m = "Июль";    break;
+            case "августа": m = "Август";  break;
+            case "сентября":m = "Сентябрь";break;
+            case "октября": m = "Октябрь"; break;
+            case "ноября":  m = "Ноябрь";  break;
+            case "декабря": m = "Декабрь"; break;
+            default: m = month; break;
+        }
+        return m;
+    }
     public static StringBuilder timeStringBuilder(int h, int m) {
         if (m < 10)
             return new StringBuilder().append(h).append(":").append("0" + m);

@@ -69,8 +69,9 @@
     <string name="b_add_new_category">Add New Category</string>
     <string name="b_add">Add</string>
     <string name="hint_enter_new_category">Enter new Category</string>
-    <string name="hint_comment">Supermarket</string>
+    <string name="hint_comment">Add comment &#8230;</string>
     <string name="no_category">No category</string>
     <string name="time">Time</string>
+    <string name="title_menu_new_entry">New entry</string>
 
 </resources>

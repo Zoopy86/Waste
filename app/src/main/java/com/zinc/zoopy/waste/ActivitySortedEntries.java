@@ -125,9 +125,7 @@ public class ActivitySortedEntries extends AppCompatActivity {
         int id = item.getItemId();
 
         if(id == android.R.id.home){
-            Intent intent = new Intent(this, ActivityJournalMonths.class);
-            intent.putExtra("date", date);
-            startActivity(intent);
+            finish();
             overridePendingTransition(R.anim.move_right2, R.anim.move_right);
         }
         if(id == R.id.action_new_waste){
